@@ -1,0 +1,12 @@
+/Users/dobreve/E-commerce-Store/src/main/java/EmilDobrev/Ecommerce/Store/ECommerceStoreApplication.java
+/Users/dobreve/E-commerce-Store/src/main/java/EmilDobrev/Ecommerce/Store/exception/NotFoundException.java
+/Users/dobreve/E-commerce-Store/src/main/java/EmilDobrev/Ecommerce/Store/user/User.java
+/Users/dobreve/E-commerce-Store/src/main/java/EmilDobrev/Ecommerce/Store/exception/GlobalExceptionHandler.java
+/Users/dobreve/E-commerce-Store/src/main/java/EmilDobrev/Ecommerce/Store/product/dto/ProductDTO.java
+/Users/dobreve/E-commerce-Store/src/main/java/EmilDobrev/Ecommerce/Store/product/ProductRepository.java
+/Users/dobreve/E-commerce-Store/src/main/java/EmilDobrev/Ecommerce/Store/config/AppConfig.java
+/Users/dobreve/E-commerce-Store/src/main/java/EmilDobrev/Ecommerce/Store/product/Product.java
+/Users/dobreve/E-commerce-Store/src/main/java/EmilDobrev/Ecommerce/Store/product/ProductService.java
+/Users/dobreve/E-commerce-Store/src/main/java/EmilDobrev/Ecommerce/Store/product/Comments.java
+/Users/dobreve/E-commerce-Store/src/main/java/EmilDobrev/Ecommerce/Store/config/SecurityConfig.java
+/Users/dobreve/E-commerce-Store/src/main/java/EmilDobrev/Ecommerce/Store/product/ProductController.java
