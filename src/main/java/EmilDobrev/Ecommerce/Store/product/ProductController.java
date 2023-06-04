@@ -64,5 +64,10 @@ public class ProductController {
         List<ProductDTO> products = productService.getAllProductsByCategory(category);
         return ResponseEntity.ok().body(products);
     }
+
+    @PostMapping("/comment")
+    public ResponseEntity<Comment> addComment(@RequestBody Comment comment){
+        return  ResponseEntity.ok().body(productService.addCommentToProduct(comment));
+    }
     //TODO fulltext search and Category product selection
 }

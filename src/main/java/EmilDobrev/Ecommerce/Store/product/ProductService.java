@@ -90,6 +90,15 @@ public class ProductService {
         productRepository.save(product);
     }
 
+    public Comment addCommentToProduct(Comment comment) {
+        Product product = productRepository.findById(comment.getProductId())
+                .orElseThrow(()-> new NotFoundException("Product not found with id:" + comment.productId));
+
+        product.addComment(comment);
+        productRepository.save(product);
+        return comment;
+    }
+
     private double calculateAverageRating(HashMap<String, Double> votedUsers) {
         return votedUsers.values()
                 .stream()
@@ -101,6 +110,7 @@ public class ProductService {
     private ProductDTO convertToDTO(Product product) {
         return modelMapper.map(product, ProductDTO.class);
     }
+
 
 
 }

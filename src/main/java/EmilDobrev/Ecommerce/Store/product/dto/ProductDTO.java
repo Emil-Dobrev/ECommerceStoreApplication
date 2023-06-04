@@ -1,9 +1,7 @@
 package EmilDobrev.Ecommerce.Store.product.dto;
 
 import EmilDobrev.Ecommerce.Store.enums.Category;
-import EmilDobrev.Ecommerce.Store.product.Comments;
-import com.fasterxml.jackson.annotation.JsonAlias;
-import com.fasterxml.jackson.databind.annotation.EnumNaming;
+import EmilDobrev.Ecommerce.Store.product.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,5 +18,5 @@ public class ProductDTO {
     private String description;
     private double price;
     private Category category;
-    private List<Comments> comments;
+    private List<Comment> comments;
 }

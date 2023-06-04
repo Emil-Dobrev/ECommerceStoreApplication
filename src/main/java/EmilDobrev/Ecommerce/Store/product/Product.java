@@ -1,7 +1,6 @@
 package EmilDobrev.Ecommerce.Store.product;
 
 import EmilDobrev.Ecommerce.Store.enums.Category;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -20,13 +19,13 @@ public class Product {
     private String description;
     private double price;
     private int quantity;
-    private List<Comments> comments = new ArrayList<>();
+    private List<Comment> comments = new ArrayList<>();
     private Category category;
     private double rating;
     private HashMap<String, Double> votedUsers = new HashMap<>();
 
 
-    public void addComment(Comments comment){
+    public void addComment(Comment comment){
         this.comments.add(comment);
     }
     public void addVote(String email, Double rating) {
