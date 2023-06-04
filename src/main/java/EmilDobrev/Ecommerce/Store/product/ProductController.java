@@ -53,7 +53,8 @@ public class ProductController {
 
     @PatchMapping("/vote")
     public ResponseEntity<HttpStatus> voteProduct( @RequestBody RatingDTO ratingDTO, String email) {
-        email = "Test";
+        //TODO email to be taken from JWT when implemented
+        email = "testEmail";
         productService.voteProduct(ratingDTO.getId(), ratingDTO.getRating(), email);
         return ResponseEntity.ok().build();
     }
