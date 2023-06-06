@@ -17,7 +17,6 @@ public class Comment {
     @Transient
     @JsonAlias("id")
     String productId;
-    //TODO take this property by JWT token when implemented
     private String createdBy;
     @NotBlank
     private String description;

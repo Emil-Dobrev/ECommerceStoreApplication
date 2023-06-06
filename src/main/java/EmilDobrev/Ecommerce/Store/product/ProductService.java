@@ -6,7 +6,6 @@ import EmilDobrev.Ecommerce.Store.exception.NotFoundException;
 import EmilDobrev.Ecommerce.Store.exception.UserAlreadyVotedException;
 import EmilDobrev.Ecommerce.Store.product.dto.ProductDTO;
 import lombok.AllArgsConstructor;
-import lombok.val;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
@@ -90,10 +89,10 @@ public class ProductService {
         productRepository.save(product);
     }
 
-    public Comment addCommentToProduct(Comment comment) {
+    public Comment addCommentToProduct(Comment comment, String name) {
         Product product = productRepository.findById(comment.getProductId())
                 .orElseThrow(()-> new NotFoundException("Product not found with id:" + comment.productId));
-
+        comment.setCreatedBy(name);
         product.addComment(comment);
         productRepository.save(product);
         return comment;

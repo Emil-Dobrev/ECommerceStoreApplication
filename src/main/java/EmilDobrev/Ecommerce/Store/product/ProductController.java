@@ -6,6 +6,7 @@ import EmilDobrev.Ecommerce.Store.product.dto.RatingDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -52,24 +53,23 @@ public class ProductController {
     }
 
     @PatchMapping("/vote")
-    public ResponseEntity<HttpStatus> voteProduct( @RequestBody RatingDTO ratingDTO, String email) {
-        //TODO email to be taken from JWT when implemented
-        productService.voteProduct(ratingDTO.getId(), ratingDTO.getRating(), email);
+    public ResponseEntity<HttpStatus> voteProduct(@RequestBody RatingDTO ratingDTO, Authentication authentication) {
+        productService.voteProduct(ratingDTO.getId(), ratingDTO.getRating(), authentication.getName());
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/category")
-    public ResponseEntity<List<ProductDTO>> getAllProductsByCategory(@RequestBody ProductDTO productDTO){
+    public ResponseEntity<List<ProductDTO>> getAllProductsByCategory(@RequestBody ProductDTO productDTO) {
         Category category = productDTO.getCategory();
         List<ProductDTO> products = productService.getAllProductsByCategory(category);
         return ResponseEntity.ok().body(products);
     }
 
     @PostMapping("/comment")
-    public ResponseEntity<Comment> addComment(@RequestBody Comment comment){
-        return  ResponseEntity.ok().body(productService.addCommentToProduct(comment));
+    public ResponseEntity<Comment> addComment(@RequestBody Comment comment, Authentication authentication) {
+        return ResponseEntity.ok().body(productService.addCommentToProduct(comment, authentication.getName()));
     }
-    //TODO fulltext search and  product selection
+
     @GetMapping("/search/{regex}")
     public ResponseEntity<List<ProductDTO>> searchProductsByName(@PathVariable String regex) {
         return ResponseEntity.ok(productService.getAllByNameRegex(regex));
