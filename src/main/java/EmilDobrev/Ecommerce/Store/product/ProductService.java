@@ -99,6 +99,14 @@ public class ProductService {
         return comment;
     }
 
+    public List<ProductDTO> getAllByNameRegex(String regex) {
+        List<Product> products = productRepository.getAllByNameMatchesRegex(regex)
+                .orElseThrow(()-> new NotFoundException("No items found"));
+        return products.stream()
+                .map(this::convertToDTO)
+                .toList();
+    }
+
     private double calculateAverageRating(HashMap<String, Double> votedUsers) {
         return votedUsers.values()
                 .stream()

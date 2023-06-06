@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping("/api/v1/products")
 @AllArgsConstructor
 public class ProductController {
 
@@ -54,7 +54,6 @@ public class ProductController {
     @PatchMapping("/vote")
     public ResponseEntity<HttpStatus> voteProduct( @RequestBody RatingDTO ratingDTO, String email) {
         //TODO email to be taken from JWT when implemented
-        email = "testEmail";
         productService.voteProduct(ratingDTO.getId(), ratingDTO.getRating(), email);
         return ResponseEntity.ok().build();
     }
@@ -70,5 +69,9 @@ public class ProductController {
     public ResponseEntity<Comment> addComment(@RequestBody Comment comment){
         return  ResponseEntity.ok().body(productService.addCommentToProduct(comment));
     }
-    //TODO fulltext search and Category product selection
+    //TODO fulltext search and  product selection
+    @GetMapping("/search/{regex}")
+    public ResponseEntity<List<ProductDTO>> searchProductsByName(@PathVariable String regex) {
+        return ResponseEntity.ok(productService.getAllByNameRegex(regex));
+    }
 }
