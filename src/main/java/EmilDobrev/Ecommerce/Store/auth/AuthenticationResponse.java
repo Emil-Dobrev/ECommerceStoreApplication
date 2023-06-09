@@ -1,6 +1,8 @@
 package EmilDobrev.Ecommerce.Store.auth;
 
 import EmilDobrev.Ecommerce.Store.user.dto.UserDto;
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +14,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AuthenticationResponse {
 
+    @JsonProperty("access_token")
     private String token;
-    private UserDto userDto;
+//    @JsonProperty("user")
+//    private UserDto userDto;
 }

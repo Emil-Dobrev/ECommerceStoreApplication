@@ -1,6 +1,9 @@
 package EmilDobrev.Ecommerce.Store.product;
 
 import EmilDobrev.Ecommerce.Store.enums.Category;
+import EmilDobrev.Ecommerce.Store.product.dto.ProductDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -11,7 +14,7 @@ import java.util.Optional;
 @Repository
 public interface ProductRepository extends MongoRepository<Product, String> {
 
-    List<Product> findAll();
+    Page<Product> findAll(Pageable pageable);
     Optional<Product> findById(String id);
     Optional< List<Product>> findAllByCategory(Category category);
       @Query("{ 'name' : { '$regex' : ?0, '$options' : 'i' } }")

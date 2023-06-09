@@ -3,13 +3,21 @@ package EmilDobrev.Ecommerce.Store.product;
 import EmilDobrev.Ecommerce.Store.enums.Category;
 import EmilDobrev.Ecommerce.Store.product.dto.ProductDTO;
 import EmilDobrev.Ecommerce.Store.product.dto.RatingDTO;
+import EmilDobrev.Ecommerce.Store.user.Role;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/v1/products")
@@ -19,9 +27,14 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping
-    public ResponseEntity<List<ProductDTO>> getAllProducts() {
-        List<ProductDTO> products = productService.getAllProducts();
-        return ResponseEntity.ok(products);
+    public ResponseEntity<Page<ProductDTO>> getAllProducts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "25") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ProductDTO> productPage = productService.getAllProducts(pageable);
+        List<ProductDTO> productDTOList = productPage.getContent().stream().toList();
+        return ResponseEntity.ok(new PageImpl<>(productDTOList, pageable, productPage.getTotalElements()));
     }
 
     @GetMapping("/{id}")
@@ -43,7 +56,6 @@ public class ProductController {
     public ResponseEntity<ProductDTO> updateProduct(@RequestBody ProductDTO productDTO) {
         ProductDTO updatedProduct = productService.updateProduct(productDTO);
         return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
-
     }
 
     @DeleteMapping("/{id}")

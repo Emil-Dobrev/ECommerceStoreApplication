@@ -23,7 +23,6 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-    private final ModelMapper modelMapper;
 
     public AuthenticationResponse register(RegisterRequest request) {
         User user = User.builder()
@@ -39,11 +38,9 @@ public class AuthenticationService {
        } catch (DuplicateKeyException exception) {
            throw new EmailAlreadyTakenException(String.format("%s email is already taken", user.getEmail()));
        }
-        UserDto userDto = modelMapper.map(user, UserDto.class);
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
-                .userDto(userDto)
                 .build();
     }
 
@@ -60,7 +57,6 @@ public class AuthenticationService {
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
-                .userDto(modelMapper.map(user, UserDto.class))
                 .build();
     }
 }

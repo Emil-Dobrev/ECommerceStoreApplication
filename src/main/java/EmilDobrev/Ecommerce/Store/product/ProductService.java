@@ -11,6 +11,9 @@ import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -25,11 +28,16 @@ public class ProductService {
     private static final Logger logger = LogManager.getLogger(ProductService.class);
 
 
-    public List<ProductDTO> getAllProducts() {
-        List<Product> products = productRepository.findAll();
-        return products.stream()
+    public Page<ProductDTO> getAllProducts(Pageable pageable) {
+        Page<Product> products = productRepository.findAll(pageable);
+        return PageableExecutionUtils.getPage(
+                products.stream()
                 .map(this::convertToDTO)
-                .toList();
+                .toList(),
+                pageable,
+                products::getTotalElements
+        );
+
     }
 
     public ProductDTO getProductById(String id) {
