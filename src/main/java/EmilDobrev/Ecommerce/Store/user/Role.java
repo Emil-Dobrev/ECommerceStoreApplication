@@ -1,6 +1,6 @@
 package EmilDobrev.Ecommerce.Store.user;
 
-public enum Role {
+public enum Role  {
     USER,
     ADMIN
 }

@@ -45,7 +45,7 @@ public class ProductController {
         }
         return ResponseEntity.notFound().build();
     }
-
+    @PreAuthorize("hasAuthority('USER')")
     @PostMapping
     public ResponseEntity<Product> createProduct(@RequestBody Product product) {
         Product createdProduct = productService.createProduct(product);
