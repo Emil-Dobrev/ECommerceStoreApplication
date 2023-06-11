@@ -1,10 +1,12 @@
 package EmilDobrev.Ecommerce.Store.user;
 
 
+import EmilDobrev.Ecommerce.Store.product.dto.ProductDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,18 +21,20 @@ import java.util.List;
 @Builder
 @Data
 public class User implements UserDetails {
+    @Id
+    private String id;
     private String firstName;
     private String lastName;
     @NotNull
     @Indexed(unique = true)
     private String email;
     private String password;
-
+    private List<ProductDTO> cart;
     private Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-       return List.of(new SimpleGrantedAuthority(role.name()));
+        return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
     @Override

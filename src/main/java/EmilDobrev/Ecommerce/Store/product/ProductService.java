@@ -5,6 +5,8 @@ import EmilDobrev.Ecommerce.Store.exception.NoSuchElementException;
 import EmilDobrev.Ecommerce.Store.exception.NotFoundException;
 import EmilDobrev.Ecommerce.Store.exception.UserAlreadyVotedException;
 import EmilDobrev.Ecommerce.Store.product.dto.ProductDTO;
+import EmilDobrev.Ecommerce.Store.user.User;
+import EmilDobrev.Ecommerce.Store.user.UserRepository;
 import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,8 +16,10 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +29,7 @@ import java.util.Optional;
 public class ProductService {
     private ProductRepository productRepository;
     private ModelMapper modelMapper;
+    private UserRepository userRepository;
     private static final Logger logger = LogManager.getLogger(ProductService.class);
 
 
@@ -32,8 +37,8 @@ public class ProductService {
         Page<Product> products = productRepository.findAll(pageable);
         return PageableExecutionUtils.getPage(
                 products.stream()
-                .map(this::convertToDTO)
-                .toList(),
+                        .map(this::convertToDTO)
+                        .toList(),
                 pageable,
                 products::getTotalElements
         );
@@ -99,7 +104,7 @@ public class ProductService {
 
     public Comment addCommentToProduct(Comment comment, String name) {
         Product product = productRepository.findById(comment.getProductId())
-                .orElseThrow(()-> new NotFoundException("Product not found with id:" + comment.productId));
+                .orElseThrow(() -> new NotFoundException("Product not found with id:" + comment.productId));
         comment.setCreatedBy(name);
         product.addComment(comment);
         productRepository.save(product);
@@ -108,10 +113,24 @@ public class ProductService {
 
     public List<ProductDTO> getAllByNameRegex(String regex) {
         List<Product> products = productRepository.getAllByNameMatchesRegex(regex)
-                .orElseThrow(()-> new NotFoundException("No items found"));
+                .orElseThrow(() -> new NotFoundException("No items found"));
         return products.stream()
                 .map(this::convertToDTO)
                 .toList();
+    }
+
+    public void addProductToCart(String productId, String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new NotFoundException("Product not found with id:" + productId));
+
+        List<ProductDTO> userCart = user.getCart();
+        if (userCart == null) {
+            userCart = new ArrayList<>();
+            user.setCart(userCart);
+        }
+        userCart.add(convertToDTO(product));
+        userRepository.save(user);
     }
 
     private double calculateAverageRating(HashMap<String, Double> votedUsers) {
@@ -125,5 +144,6 @@ public class ProductService {
     private ProductDTO convertToDTO(Product product) {
         return modelMapper.map(product, ProductDTO.class);
     }
+
 
 }

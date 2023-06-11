@@ -86,4 +86,10 @@ public class ProductController {
     public ResponseEntity<List<ProductDTO>> searchProductsByName(@PathVariable String regex) {
         return ResponseEntity.ok(productService.getAllByNameRegex(regex));
     }
+
+    @PutMapping("/add/{id}")
+    public ResponseEntity<HttpStatus> addProductToCart(@PathVariable String id, Authentication authentication) {
+        productService.addProductToCart(id, authentication.getName());
+        return ResponseEntity.noContent().build();
+    }
 }
