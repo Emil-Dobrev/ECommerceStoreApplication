@@ -87,9 +87,15 @@ public class ProductController {
         return ResponseEntity.ok(productService.getAllByNameRegex(regex));
     }
 
-    @PutMapping("/add/{id}")
+    @PutMapping("/cart/add/{id}")
     public ResponseEntity<HttpStatus> addProductToCart(@PathVariable String id, Authentication authentication) {
         productService.addProductToCart(id, authentication.getName());
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/cart/remove/{id}")
+    public ResponseEntity<HttpStatus> removeProductFromCart(@PathVariable String id, Authentication authentication) {
+        productService.removeProductFromCart(id, authentication.getName());
         return ResponseEntity.noContent().build();
     }
 }

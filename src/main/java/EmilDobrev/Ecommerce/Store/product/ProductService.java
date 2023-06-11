@@ -133,6 +133,16 @@ public class ProductService {
         userRepository.save(user);
     }
 
+    public void removeProductFromCart(String id, String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Product not found with id:" + id));
+
+        List<ProductDTO> userCart = user.getCart();
+        userCart.remove(convertToDTO(product));
+        userRepository.save(user);
+    }
+
     private double calculateAverageRating(HashMap<String, Double> votedUsers) {
         return votedUsers.values()
                 .stream()
@@ -144,6 +154,4 @@ public class ProductService {
     private ProductDTO convertToDTO(Product product) {
         return modelMapper.map(product, ProductDTO.class);
     }
-
-
 }
