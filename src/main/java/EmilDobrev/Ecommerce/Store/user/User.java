@@ -1,6 +1,7 @@
 package EmilDobrev.Ecommerce.Store.user;
 
 
+import EmilDobrev.Ecommerce.Store.coupons.Coupon;
 import EmilDobrev.Ecommerce.Store.product.dto.ProductDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,6 +14,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -31,6 +34,8 @@ public class User implements UserDetails {
     private String password;
     private List<ProductDTO> cart;
     private Role role;
+    private Instant birthdate;
+    private List<Coupon> coupons;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
