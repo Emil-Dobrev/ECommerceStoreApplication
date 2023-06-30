@@ -28,7 +28,7 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 @Slf4j
-public class ProductServiceImp {
+public class ProductServiceImp implements  ProductService{
     public static final String PRODUCT_NOT_FOUND_WITH_ID = "Product not found with id:";
     private ProductRepository productRepository;
     private ModelMapper modelMapper;
@@ -135,7 +135,7 @@ public class ProductServiceImp {
                 .build();
     }
 
-    public void removeProductFromCart(String id, String email) {
+    public CartResponse removeProductFromCart(String id, String email) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(PRODUCT_NOT_FOUND_WITH_ID + id));
@@ -143,6 +143,10 @@ public class ProductServiceImp {
         List<ProductDTO> userCart = user.getCart();
         userCart.remove(convertToDTO(product));
         userRepository.save(user);
+        return CartResponse.builder()
+                .cart(userCart)
+                .message("Successfully removed")
+                .build();
     }
 
     private double calculateAverageRating(HashMap<String, Double> votedUsers) {

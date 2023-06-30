@@ -1,6 +1,7 @@
 package emildobrev.Ecommerce.Store.product;
 
 import emildobrev.Ecommerce.Store.enums.Category;
+import emildobrev.Ecommerce.Store.product.dto.CartResponse;
 import emildobrev.Ecommerce.Store.product.dto.ProductDTO;
 import emildobrev.Ecommerce.Store.product.dto.RatingDTO;
 import lombok.AllArgsConstructor;
@@ -43,6 +44,7 @@ public class ProductController {
         }
         return ResponseEntity.notFound().build();
     }
+
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping
     public ResponseEntity<Product> createProduct(@RequestBody Product product) {
@@ -86,9 +88,8 @@ public class ProductController {
     }
 
     @PutMapping("/cart/add/{id}")
-    public ResponseEntity<HttpStatus> addProductToCart(@PathVariable String id, Authentication authentication) {
-        productService.addProductToCart(id, authentication.getName());
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<CartResponse> addProductToCart(@PathVariable String id, Authentication authentication) {
+        return ResponseEntity.ok().body(productService.addProductToCart(id, authentication.getName()));
     }
 
     @PutMapping("/cart/remove/{id}")
