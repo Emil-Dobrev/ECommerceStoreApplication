@@ -2,7 +2,7 @@ package emildobrev.Ecommerce.Store.unit.coupons;
 
 import emildobrev.Ecommerce.Store.coupons.Coupon;
 import emildobrev.Ecommerce.Store.coupons.CouponRepository;
-import emildobrev.Ecommerce.Store.coupons.CouponService;
+import emildobrev.Ecommerce.Store.coupons.CouponServiceImp;
 import emildobrev.Ecommerce.Store.enums.Category;
 import emildobrev.Ecommerce.Store.product.dto.ProductDTO;
 import emildobrev.Ecommerce.Store.user.UserRepository;
@@ -14,12 +14,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class CouponServiceTest {
@@ -30,11 +31,11 @@ public class CouponServiceTest {
     private CouponRepository couponRepository;
 
     @InjectMocks
-    private CouponService couponService;
+    private CouponServiceImp couponService;
 
     @BeforeEach
     public void setUp() {
-        couponService = new CouponService(userRepository, couponRepository);
+        couponService = new CouponServiceImp(userRepository, couponRepository);
     }
 
 
@@ -49,20 +50,23 @@ public class CouponServiceTest {
                 .build();
 
         // Create a sample list of products with their original prices
-        List<ProductDTO> cart = new ArrayList<>();
+        HashSet<ProductDTO> cart = new HashSet<>();
         cart.add(new ProductDTO("Product 1", "", "", new BigDecimal("100.00"), Category.ELECTRONIC, List.of()));
         cart.add(new ProductDTO("Product 2", "", "", new BigDecimal("50.00"), Category.BOOKS, List.of()));
 
         // Call the reducePrice method
-        List<ProductDTO> reducedCart = couponService.reducePrice(cart, coupon);
+        HashSet<ProductDTO> reducedCart = couponService.reducePrice(cart, coupon);
+
+        BigDecimal expectedPrice1 = new BigDecimal("80.00").setScale(2, RoundingMode.HALF_UP);
+        BigDecimal expectedPrice2 = new BigDecimal("40.00").setScale(2, RoundingMode.HALF_UP);
+
 
         for (ProductDTO product : reducedCart) {
-            System.out.println("Product: " + product.getName() + ", Price: " + product.getPrice());
+            if (product.getName().equals("Product 1")) {
+                assertEquals(expectedPrice1, product.getPrice());
+            } else if (product.getName().equals("Product 2")) {
+                assertEquals(expectedPrice2, product.getPrice());
+            }
         }
-
-        // Check if the prices of products in the reduced cart are updated correctly
-        assertEquals(new BigDecimal("80.00"), reducedCart.get(0).getPrice());
-        assertEquals(new BigDecimal("40.00"), reducedCart.get(1).getPrice());
     }
-
 }
