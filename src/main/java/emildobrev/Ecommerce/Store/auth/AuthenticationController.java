@@ -1,5 +1,8 @@
 package emildobrev.Ecommerce.Store.auth;
 
+import emildobrev.Ecommerce.Store.auth.dto.AuthenticationRequest;
+import emildobrev.Ecommerce.Store.auth.dto.AuthenticationResponse;
+import emildobrev.Ecommerce.Store.auth.dto.RegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -21,7 +24,7 @@ public class AuthenticationController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody AuthenticationRequest request) {
+    public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest request) {
         return ResponseEntity.ok(authenticationService.authenticate(request));
     }
 }

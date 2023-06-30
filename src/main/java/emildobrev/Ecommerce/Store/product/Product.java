@@ -31,17 +31,17 @@ public class Product {
     private List<Comment> comments = new ArrayList<>();
     private Category category;
     private double rating;
-    private HashMap<String, Double> votedUsers = new HashMap<>();
+    private HashMap<String, Double> votedUsers;
 
 
     public void addComment(Comment comment){
         this.comments.add(comment);
     }
-    public void addVote(String email, Double rating) {
-        votedUsers.put(email, rating);
+    public void addVote(String id, Double rating) {
+        votedUsers.put(id, rating);
     }
 
-    public void removeVote(String email) {
-        votedUsers.remove(email);
+    public void removeVote(String id) {
+        votedUsers.remove(id);
     }
 }

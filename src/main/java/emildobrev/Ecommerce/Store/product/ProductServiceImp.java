@@ -22,6 +22,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+import static emildobrev.Ecommerce.Store.constants.Constants.USER_NOT_FOUND;
+
 @Service
 @AllArgsConstructor
 @Slf4j
@@ -89,10 +91,12 @@ public class ProductServiceImp implements  ProductService{
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(PRODUCT_NOT_FOUND_WITH_ID + id));
 
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
         if (product.getVotedUsers() != null && product.getVotedUsers().containsKey(email)) {
             throw new UserAlreadyVotedException("User already voted for product with id:" + id);
         }
-        product.addVote(email, rating);
+        product.addVote(user.getId(), rating);
         product.setRating(calculateAverageRating(product.getVotedUsers()));
         productRepository.save(product);
     }
@@ -115,7 +119,7 @@ public class ProductServiceImp implements  ProductService{
     }
 
     public CartResponse addProductToCart(String productId, String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new NotFoundException(PRODUCT_NOT_FOUND_WITH_ID + productId));
 
@@ -133,7 +137,7 @@ public class ProductServiceImp implements  ProductService{
     }
 
     public CartResponse removeProductFromCart(String id, String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(PRODUCT_NOT_FOUND_WITH_ID + id));
 

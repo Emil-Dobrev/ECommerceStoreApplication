@@ -1,5 +1,8 @@
 package emildobrev.Ecommerce.Store.auth;
 
+import emildobrev.Ecommerce.Store.auth.dto.AuthenticationRequest;
+import emildobrev.Ecommerce.Store.auth.dto.AuthenticationResponse;
+import emildobrev.Ecommerce.Store.auth.dto.RegisterRequest;
 import emildobrev.Ecommerce.Store.config.JwtService;
 import emildobrev.Ecommerce.Store.exception.EmailAlreadyTakenException;
 import emildobrev.Ecommerce.Store.user.Role;
@@ -12,6 +15,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +33,7 @@ public class AuthenticationService {
                 .lastName(request.getLastName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.USER)
+                .roles(List.of(Role.USER))
                 .build();
 
        try{

@@ -1,4 +1,4 @@
-package emildobrev.Ecommerce.Store.auth;
+package emildobrev.Ecommerce.Store.auth.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -14,6 +14,4 @@ public class AuthenticationResponse {
 
     @JsonProperty("access_token")
     private String token;
-//    @JsonProperty("user")
-//    private UserDto userDto;
 }

@@ -50,8 +50,8 @@ public class CouponServiceTest {
 
         // Create a sample list of products with their original prices
         HashSet<ProductDTO> cart = new HashSet<>();
-        cart.add(new ProductDTO("Product 1", "", "", new BigDecimal("100.00"), Category.ELECTRONIC, List.of()));
-        cart.add(new ProductDTO("Product 2", "", "", new BigDecimal("50.00"), Category.BOOKS, List.of()));
+        cart.add(new ProductDTO("Product 1", "", "", new BigDecimal("100.00"), Category.ELECTRONIC,1, List.of()));
+        cart.add(new ProductDTO("Product 2", "", "", new BigDecimal("50.00"), Category.BOOKS,1, List.of()));
 
         // Call the reducePrice method
         HashSet<ProductDTO> reducedCart = couponService.reducePrice(cart, coupon);

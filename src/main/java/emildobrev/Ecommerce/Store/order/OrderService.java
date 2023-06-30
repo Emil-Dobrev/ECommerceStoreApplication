@@ -6,5 +6,5 @@ import java.math.BigDecimal;
 
 public interface OrderService {
 
-    Order createOrder(@NonNull  String userId, @NonNull BigDecimal totalAmount);
+    Order createOrder(@NonNull  String email);
 }

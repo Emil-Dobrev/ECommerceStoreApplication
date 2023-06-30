@@ -1,18 +1,18 @@
-package emildobrev.Ecommerce.Store.auth;
+package emildobrev.Ecommerce.Store.auth.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class RegisterRequest {
-
+    @NonNull
     private String firstName;
+    @NonNull
     private String lastName;
+    @NonNull
     private String email;
+    @NonNull
     private String password;
 }
