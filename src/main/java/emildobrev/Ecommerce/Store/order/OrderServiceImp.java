@@ -2,12 +2,10 @@ package emildobrev.Ecommerce.Store.order;
 
 import emildobrev.Ecommerce.Store.exception.EmptyCartException;
 import emildobrev.Ecommerce.Store.exception.NotFoundException;
-import emildobrev.Ecommerce.Store.order.dto.CreateOrderDTO;
 import emildobrev.Ecommerce.Store.product.dto.ProductCartDTO;
 import emildobrev.Ecommerce.Store.user.Role;
 import emildobrev.Ecommerce.Store.user.User;
 import emildobrev.Ecommerce.Store.user.UserRepository;
-import emildobrev.Ecommerce.Store.user.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.modelmapper.ModelMapper;
@@ -18,7 +16,6 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.Collection;
 import java.util.HashSet;
 
 @Service
