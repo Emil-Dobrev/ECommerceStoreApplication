@@ -51,12 +51,7 @@ public class OrderServiceImp implements OrderService {
                 .orderDate(orderDate)
                 .totalAmount(totalAmount)
                 .products(cart);
-//        Order order = Order.builder()
-//                .userId(user.getId())
-//                .orderDate(orderDate)
-//                .totalAmount(totalAmount)
-//                .products(user.getCart())
-//                .build();
+//
         if (couponId != null) {
             Coupon coupon = couponRepository.findById(couponId)
                     .orElseThrow(() -> new NotFoundException("Coupon not found with ID: " + couponId));
