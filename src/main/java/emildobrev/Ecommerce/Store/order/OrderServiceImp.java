@@ -3,16 +3,14 @@ package emildobrev.Ecommerce.Store.order;
 import emildobrev.Ecommerce.Store.exception.NotFoundException;
 import emildobrev.Ecommerce.Store.order.dto.CreateOrderDTO;
 import emildobrev.Ecommerce.Store.product.dto.ProductCartDTO;
-import emildobrev.Ecommerce.Store.product.dto.ProductDTO;
 import emildobrev.Ecommerce.Store.user.User;
 import emildobrev.Ecommerce.Store.user.UserRepository;
-import emildobrev.Ecommerce.Store.user.UserService;
 import emildobrev.Ecommerce.Store.user.dto.UserDto;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -26,6 +24,7 @@ public class OrderServiceImp implements OrderService {
     private final ModelMapper modelMapper;
 
     @Override
+    @Transactional
     public Order createOrder(@NotNull String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("User not found with ID: " + email));
@@ -37,9 +36,11 @@ public class OrderServiceImp implements OrderService {
                 .user(modelMapper.map(user, UserDto.class))
                 .totalAmount(createOrderDTO.totalAmount())
                 .orderDate(createOrderDTO.orderDate())
-                .cart(user.getCart())
+                .products(user.getCart())
                 .build();
 
+        user.setCart(new HashSet<>());
+        userRepository.save(user);
         return orderRepository.save(order);
     }
 

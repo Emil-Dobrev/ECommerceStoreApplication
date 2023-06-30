@@ -1,8 +1,6 @@
 package emildobrev.Ecommerce.Store.order;
 
 import emildobrev.Ecommerce.Store.product.dto.ProductCartDTO;
-import emildobrev.Ecommerce.Store.product.dto.ProductDTO;
-import emildobrev.Ecommerce.Store.user.User;
 import emildobrev.Ecommerce.Store.user.dto.UserDto;
 import lombok.*;
 import org.springframework.data.annotation.Id;
@@ -27,5 +25,5 @@ public class Order {
     @NonNull
     private Instant orderDate;
     @NonNull
-    private HashSet<ProductCartDTO> cart;
+    private HashSet<ProductCartDTO> products;
 }

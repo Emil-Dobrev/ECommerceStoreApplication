@@ -34,8 +34,6 @@ public class ProductServiceImp implements  ProductService{
     private ModelMapper modelMapper;
     private UserRepository userRepository;
 
-
-
     public Page<ProductDTO> getAllProducts(Pageable pageable) {
         Page<Product> products = productRepository.findAll(pageable);
         return PageableExecutionUtils.getPage(
