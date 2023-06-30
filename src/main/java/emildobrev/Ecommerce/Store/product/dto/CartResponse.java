@@ -5,12 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.HashSet;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Data
 public class CartResponse {
-        private List<ProductDTO> cart;
+        private HashSet<ProductDTO> cart;
         private String message;
 }

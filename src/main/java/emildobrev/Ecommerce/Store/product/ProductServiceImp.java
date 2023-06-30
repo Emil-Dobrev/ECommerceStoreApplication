@@ -20,10 +20,7 @@ import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -122,9 +119,9 @@ public class ProductServiceImp implements  ProductService{
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new NotFoundException(PRODUCT_NOT_FOUND_WITH_ID + productId));
 
-        List<ProductDTO> userCart = user.getCart();
+        HashSet<ProductDTO> userCart = user.getCart();
         if (userCart == null) {
-            userCart = new ArrayList<>();
+            userCart = new HashSet<>();
             user.setCart(userCart);
         }
         userCart.add(convertToDTO(product));
@@ -140,7 +137,7 @@ public class ProductServiceImp implements  ProductService{
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(PRODUCT_NOT_FOUND_WITH_ID + id));
 
-        List<ProductDTO> userCart = user.getCart();
+        HashSet<ProductDTO> userCart = user.getCart();
         userCart.remove(convertToDTO(product));
         userRepository.save(user);
         return CartResponse.builder()

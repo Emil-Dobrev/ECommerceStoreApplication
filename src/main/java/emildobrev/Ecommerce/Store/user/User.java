@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.Instant;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 @Document(collection = "users")
@@ -31,10 +32,10 @@ public class User implements UserDetails {
     @Indexed(unique = true)
     private String email;
     private String password;
-    private List<ProductDTO> cart;
+    private HashSet<ProductDTO> cart;
     private Role role;
     private Instant birthdate;
-    private List<Coupon> coupons;
+    private HashSet<Coupon> coupons;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

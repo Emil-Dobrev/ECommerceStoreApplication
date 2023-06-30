@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Instant;
-import java.util.List;
+import java.util.HashSet;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,7 +40,7 @@ public class CouponService {
          ) {
 
             user.setCart(reducePrice(user.getCart(), coupon));
-            List<Coupon> userCoupons = user.getCoupons();
+            HashSet<Coupon> userCoupons = user.getCoupons();
             userCoupons.remove(coup);
             user.setCoupons(userCoupons);
             userRepository.save(user);
@@ -49,7 +49,7 @@ public class CouponService {
        return false;
     }
 
-    public List<ProductDTO> reducePrice(@NotNull List<ProductDTO> cart, Coupon coupon) {
+    public HashSet<ProductDTO> reducePrice(@NotNull HashSet<ProductDTO> cart, Coupon coupon) {
         return cart.stream()
                 .peek(product -> {
                     BigDecimal originalPrice = product.getPrice();
@@ -58,7 +58,7 @@ public class CouponService {
                             .divide(new BigDecimal(100), 2, RoundingMode.HALF_UP);
                     product.setPrice(originalPrice.subtract(discountAmount).setScale(2, RoundingMode.HALF_UP));
                 })
-                .collect(Collectors.toList());
+                .collect(Collectors.toCollection(HashSet::new));
 
     }
 }
