@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/coupons")
 @RequiredArgsConstructor
 public class CouponController {
-    private CouponService couponService;
+    private final CouponService couponService;
 
     @PostMapping
     public ResponseEntity<Coupon> createCoupon(@RequestBody CreateCouponDTO createCouponDTO) {

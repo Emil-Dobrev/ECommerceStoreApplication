@@ -24,6 +24,4 @@ public class Coupon {
     private Instant validFrom;
     @NonNull
     private Instant validTo;
-    private boolean isUsed = false;
-
 }
