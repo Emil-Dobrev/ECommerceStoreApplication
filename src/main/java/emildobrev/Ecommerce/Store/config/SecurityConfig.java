@@ -33,7 +33,7 @@ public class SecurityConfig {
                     authz
                             .requestMatchers("/api/v1/auth/**", API_V_1_PRODUCTS ).permitAll()
                             .requestMatchers(HttpMethod.PATCH  , API_V_1_PRODUCTS , "http://localhost:8080/api/v1/products/vote").hasAnyAuthority(ADMIN, USER)
-                            .requestMatchers(HttpMethod.POST  , API_V_1_PRODUCTS).hasAnyAuthority(ADMIN)
+                            .requestMatchers(HttpMethod.POST  , API_V_1_PRODUCTS, "/api/v1/coupons").hasAnyAuthority(ADMIN)
                             .requestMatchers(HttpMethod.DELETE, "/api/v1/products/*").hasAnyAuthority(ADMIN)
                             .requestMatchers(HttpMethod.POST, "/api/v1/order").hasAnyAuthority(USER)
                             .anyRequest().authenticated()

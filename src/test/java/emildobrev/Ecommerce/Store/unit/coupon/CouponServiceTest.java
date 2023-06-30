@@ -5,7 +5,6 @@ import emildobrev.Ecommerce.Store.coupons.CouponRepository;
 import emildobrev.Ecommerce.Store.coupons.CouponServiceImp;
 import emildobrev.Ecommerce.Store.enums.Category;
 import emildobrev.Ecommerce.Store.product.dto.ProductCartDTO;
-import emildobrev.Ecommerce.Store.product.dto.ProductDTO;
 import emildobrev.Ecommerce.Store.user.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,12 +12,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Instant;
 import java.util.HashSet;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -29,13 +28,15 @@ public class CouponServiceTest {
     private UserRepository userRepository;
     @Mock
     private CouponRepository couponRepository;
+    @Mock
+    private ModelMapper modelMapper;
 
     @InjectMocks
     private CouponServiceImp couponService;
 
     @BeforeEach
     public void setUp() {
-        couponService = new CouponServiceImp(userRepository, couponRepository);
+        couponService = new CouponServiceImp(userRepository, couponRepository, modelMapper);
     }
 
 
@@ -51,8 +52,8 @@ public class CouponServiceTest {
 
         // Create a sample list of products with their original prices
         HashSet<ProductCartDTO> cart = new HashSet<>();
-        cart.add(new ProductCartDTO("Product 1", "", "", new BigDecimal("100.00"), Category.ELECTRONIC,1));
-        cart.add(new ProductCartDTO("Product 2", "", "", new BigDecimal("50.00"), Category.BOOKS,1));
+        cart.add(new ProductCartDTO("Product 1", "", "", new BigDecimal("100.00"), Category.ELECTRONIC, 1));
+        cart.add(new ProductCartDTO("Product 2", "", "", new BigDecimal("50.00"), Category.BOOKS, 1));
 
         // Call the reducePrice method
         HashSet<ProductCartDTO> reducedCart = couponService.reducePrice(cart, coupon);

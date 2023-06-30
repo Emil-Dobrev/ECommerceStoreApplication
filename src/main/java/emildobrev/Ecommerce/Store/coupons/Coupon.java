@@ -16,7 +16,9 @@ public class Coupon {
 
     @Id
     private String id;
+    @NonNull
     private CouponsType code;
+    @NonNull
     private double discount;
     @NonNull
     private Instant validFrom;

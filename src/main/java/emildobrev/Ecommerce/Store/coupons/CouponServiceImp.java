@@ -1,5 +1,6 @@
 package emildobrev.Ecommerce.Store.coupons;
 
+import emildobrev.Ecommerce.Store.coupons.dto.CreateCouponDTO;
 import emildobrev.Ecommerce.Store.exception.NotFoundException;
 import emildobrev.Ecommerce.Store.product.dto.ProductCartDTO;
 import emildobrev.Ecommerce.Store.product.dto.ProductDTO;
@@ -8,6 +9,7 @@ import emildobrev.Ecommerce.Store.user.UserRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +26,8 @@ public class CouponServiceImp implements CouponService {
 
     private final UserRepository userRepository;
     private final CouponRepository couponRepository;
+    private final ModelMapper modelMapper;
+
 
     @Transactional
     public boolean useCoupon(@NonNull String email, @NonNull Coupon coupon) {
@@ -60,6 +64,13 @@ public class CouponServiceImp implements CouponService {
                     product.setPrice(originalPrice.subtract(discountAmount).setScale(2, RoundingMode.HALF_UP));
                 })
                 .collect(Collectors.toCollection(HashSet::new));
+
+    }
+
+    @Override
+    public Coupon createCoupon(CreateCouponDTO createCouponDTO) {
+        Coupon coupon = modelMapper.map(createCouponDTO, Coupon.class);
+       return couponRepository.save(coupon);
 
     }
 }
