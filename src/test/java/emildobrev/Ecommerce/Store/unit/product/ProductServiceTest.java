@@ -1,4 +1,4 @@
-package emildobrev.Ecommerce.Store.unit;
+package emildobrev.Ecommerce.Store.unit.product;
 
 import emildobrev.Ecommerce.Store.enums.Category;
 import emildobrev.Ecommerce.Store.product.Product;

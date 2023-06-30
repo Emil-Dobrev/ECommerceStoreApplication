@@ -1,4 +1,4 @@
-package emildobrev.Ecommerce.Store.unit.coupons;
+package emildobrev.Ecommerce.Store.unit.coupon;
 
 import emildobrev.Ecommerce.Store.coupons.Coupon;
 import emildobrev.Ecommerce.Store.coupons.CouponRepository;
@@ -16,7 +16,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
