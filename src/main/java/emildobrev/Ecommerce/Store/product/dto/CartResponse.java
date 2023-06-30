@@ -12,6 +12,6 @@ import java.util.HashSet;
 @Builder
 @Data
 public class CartResponse {
-        private HashSet<ProductDTO> cart;
+        private HashSet<ProductCartDTO> cart;
         private String message;
 }

@@ -2,6 +2,7 @@ package emildobrev.Ecommerce.Store.user;
 
 
 import emildobrev.Ecommerce.Store.coupons.Coupon;
+import emildobrev.Ecommerce.Store.product.dto.ProductCartDTO;
 import emildobrev.Ecommerce.Store.product.dto.ProductDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,7 +34,7 @@ public class User implements UserDetails {
     @Indexed(unique = true)
     private String email;
     private String password;
-    private HashSet<ProductDTO> cart;
+    private HashSet<ProductCartDTO> cart;
     private List<Role> roles;
     private Instant birthdate;
     private HashSet<Coupon> coupons;

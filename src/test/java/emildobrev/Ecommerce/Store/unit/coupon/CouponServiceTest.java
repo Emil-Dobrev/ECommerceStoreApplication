@@ -4,6 +4,7 @@ import emildobrev.Ecommerce.Store.coupons.Coupon;
 import emildobrev.Ecommerce.Store.coupons.CouponRepository;
 import emildobrev.Ecommerce.Store.coupons.CouponServiceImp;
 import emildobrev.Ecommerce.Store.enums.Category;
+import emildobrev.Ecommerce.Store.product.dto.ProductCartDTO;
 import emildobrev.Ecommerce.Store.product.dto.ProductDTO;
 import emildobrev.Ecommerce.Store.user.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,18 +50,18 @@ public class CouponServiceTest {
                 .build();
 
         // Create a sample list of products with their original prices
-        HashSet<ProductDTO> cart = new HashSet<>();
-        cart.add(new ProductDTO("Product 1", "", "", new BigDecimal("100.00"), Category.ELECTRONIC,1, List.of()));
-        cart.add(new ProductDTO("Product 2", "", "", new BigDecimal("50.00"), Category.BOOKS,1, List.of()));
+        HashSet<ProductCartDTO> cart = new HashSet<>();
+        cart.add(new ProductCartDTO("Product 1", "", "", new BigDecimal("100.00"), Category.ELECTRONIC,1));
+        cart.add(new ProductCartDTO("Product 2", "", "", new BigDecimal("50.00"), Category.BOOKS,1));
 
         // Call the reducePrice method
-        HashSet<ProductDTO> reducedCart = couponService.reducePrice(cart, coupon);
+        HashSet<ProductCartDTO> reducedCart = couponService.reducePrice(cart, coupon);
 
         BigDecimal expectedPrice1 = new BigDecimal("80.00").setScale(2, RoundingMode.HALF_UP);
         BigDecimal expectedPrice2 = new BigDecimal("40.00").setScale(2, RoundingMode.HALF_UP);
 
 
-        for (ProductDTO product : reducedCart) {
+        for (ProductCartDTO product : reducedCart) {
             if (product.getName().equals("Product 1")) {
                 assertEquals(expectedPrice1, product.getPrice());
             } else if (product.getName().equals("Product 2")) {

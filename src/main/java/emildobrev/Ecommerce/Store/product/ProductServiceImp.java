@@ -6,6 +6,7 @@ import emildobrev.Ecommerce.Store.exception.NotFoundException;
 import emildobrev.Ecommerce.Store.exception.ProductCreationException;
 import emildobrev.Ecommerce.Store.exception.UserAlreadyVotedException;
 import emildobrev.Ecommerce.Store.product.dto.CartResponse;
+import emildobrev.Ecommerce.Store.product.dto.ProductCartDTO;
 import emildobrev.Ecommerce.Store.product.dto.ProductDTO;
 import emildobrev.Ecommerce.Store.user.User;
 import emildobrev.Ecommerce.Store.user.UserRepository;
@@ -123,12 +124,12 @@ public class ProductServiceImp implements  ProductService{
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new NotFoundException(PRODUCT_NOT_FOUND_WITH_ID + productId));
 
-        HashSet<ProductDTO> userCart = user.getCart();
+        HashSet<ProductCartDTO> userCart = user.getCart();
         if (userCart == null) {
             userCart = new HashSet<>();
             user.setCart(userCart);
         }
-        userCart.add(convertToDTO(product));
+        userCart.add(modelMapper.map(product, ProductCartDTO.class));
         userRepository.save(user);
         return CartResponse.builder()
                 .cart(userCart)
@@ -141,8 +142,8 @@ public class ProductServiceImp implements  ProductService{
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(PRODUCT_NOT_FOUND_WITH_ID + id));
 
-        HashSet<ProductDTO> userCart = user.getCart();
-        userCart.remove(convertToDTO(product));
+        HashSet<ProductCartDTO> userCart = user.getCart();
+        userCart.remove(modelMapper.map(product, ProductCartDTO.class));
         userRepository.save(user);
         return CartResponse.builder()
                 .cart(userCart)

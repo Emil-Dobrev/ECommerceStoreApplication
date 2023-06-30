@@ -27,7 +27,8 @@ public class Product {
     private String description;
     @NonNull
     private BigDecimal price;
-    private int quantity;
+    private int quantityInWarehouse;
+    private int orderQuantity;
     private List<Comment> comments = new ArrayList<>();
     private Category category;
     private double rating;

@@ -1,6 +1,7 @@
 package emildobrev.Ecommerce.Store.coupons;
 
 import emildobrev.Ecommerce.Store.exception.NotFoundException;
+import emildobrev.Ecommerce.Store.product.dto.ProductCartDTO;
 import emildobrev.Ecommerce.Store.product.dto.ProductDTO;
 import emildobrev.Ecommerce.Store.user.User;
 import emildobrev.Ecommerce.Store.user.UserRepository;
@@ -49,7 +50,7 @@ public class CouponServiceImp implements CouponService {
         return false;
     }
 
-    public HashSet<ProductDTO> reducePrice(@NotNull HashSet<ProductDTO> cart, Coupon coupon) {
+    public HashSet<ProductCartDTO> reducePrice(@NotNull HashSet<ProductCartDTO> cart, Coupon coupon) {
         return cart.stream()
                 .peek(product -> {
                     BigDecimal originalPrice = product.getPrice();
