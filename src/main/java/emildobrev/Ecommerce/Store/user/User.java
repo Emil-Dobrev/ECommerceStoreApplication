@@ -34,7 +34,7 @@ public class User implements UserDetails {
     private List<ProductDTO> cart;
     private Role role;
     private Instant birthdate;
-    private List<Coupon> coupon;
+    private List<Coupon> coupons;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
