@@ -65,12 +65,9 @@ public class CouponJob {
         expiredCoupons.ifPresent(couponRepository::deleteAll);
     }
 
-
-
     private int generateRandomDiscount() {
         int minDiscount = 5;
         int maxDiscount = 15;
-
         return ThreadLocalRandom.current().nextInt(minDiscount, maxDiscount + 1);
     }
 
