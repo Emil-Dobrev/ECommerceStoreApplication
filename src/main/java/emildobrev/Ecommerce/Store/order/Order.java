@@ -1,5 +1,6 @@
 package emildobrev.Ecommerce.Store.order;
 
+import emildobrev.Ecommerce.Store.coupons.Coupon;
 import emildobrev.Ecommerce.Store.product.dto.ProductCartDTO;
 import lombok.*;
 import org.springframework.data.annotation.Id;
@@ -25,5 +26,6 @@ public class Order {
     private Instant orderDate;
     @NonNull
     private HashSet<ProductCartDTO> products;
+    private String couponId;
     private boolean isCanceled = false;
 }

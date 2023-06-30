@@ -1,5 +1,7 @@
 package emildobrev.Ecommerce.Store.order;
 
+import emildobrev.Ecommerce.Store.coupons.Coupon;
+import emildobrev.Ecommerce.Store.coupons.CouponRepository;
 import emildobrev.Ecommerce.Store.exception.AccessDeniedException;
 import emildobrev.Ecommerce.Store.exception.EmptyCartException;
 import emildobrev.Ecommerce.Store.exception.NotFoundException;
@@ -25,11 +27,12 @@ public class OrderServiceImp implements OrderService {
 
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
+    private final CouponRepository couponRepository;
     private final ModelMapper modelMapper;
 
     @Override
     @Transactional
-    public Order createOrder(@NotNull String email) {
+    public Order createOrder(@NotNull String email, String couponId) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("User not found with ID: " + email));
         var cart = user.getCart();
@@ -39,6 +42,14 @@ public class OrderServiceImp implements OrderService {
         var totalAmount = calculateTotalAmount(user.getCart());
         LocalDateTime currentDateTime = LocalDateTime.now();
         Instant orderDate = currentDateTime.atOffset(ZoneOffset.UTC).toInstant();
+
+        if(couponId != null) {
+            Coupon coupon = couponRepository.findById(couponId)
+                    .orElseThrow(() -> new NotFoundException("Coupon not found with ID: " + couponId));
+            double discountPercentage = coupon.getDiscount();
+            BigDecimal discountAmount = totalAmount.multiply(BigDecimal.valueOf(discountPercentage / 100.0));
+            totalAmount = totalAmount.subtract(discountAmount);
+        }
 
         Order order = Order.builder()
                 .userId(user.getId())

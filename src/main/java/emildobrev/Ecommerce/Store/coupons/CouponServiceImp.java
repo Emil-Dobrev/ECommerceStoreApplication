@@ -64,11 +64,10 @@ public class CouponServiceImp implements CouponService {
                     product.setPrice(originalPrice.subtract(discountAmount).setScale(2, RoundingMode.HALF_UP));
                 })
                 .collect(Collectors.toCollection(HashSet::new));
-
     }
 
     @Override
-    public Coupon createCoupon(CreateCouponDTO createCouponDTO) {
+    public Coupon createCoupon(@NonNull CreateCouponDTO createCouponDTO) {
         Coupon coupon = modelMapper.map(createCouponDTO, Coupon.class);
        return couponRepository.save(coupon);
 

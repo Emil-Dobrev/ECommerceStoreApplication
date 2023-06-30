@@ -14,8 +14,10 @@ public class OrderController {
 
     private final OrderService orderService;
     @PostMapping
-    public ResponseEntity<Order> createOrder(Authentication authentication) {
-      return ResponseEntity.ok().body(orderService.createOrder(authentication.getName()));
+    public ResponseEntity<Order> createOrder(Authentication authentication,
+                                            @RequestParam(name = "couponId", required = false) String couponId
+    ) {
+      return ResponseEntity.ok().body(orderService.createOrder(authentication.getName(), couponId));
     }
 
     @PatchMapping
