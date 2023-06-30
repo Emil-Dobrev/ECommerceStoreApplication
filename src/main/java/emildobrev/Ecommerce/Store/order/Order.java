@@ -27,5 +27,6 @@ public class Order {
     @NonNull
     private HashSet<ProductCartDTO> products;
     private String couponId;
+    private BigDecimal totalDiscount;
     private boolean isCanceled = false;
 }
