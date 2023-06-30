@@ -17,4 +17,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleNoSuchElementException(NoSuchElementException ex) {
         return ResponseEntity.status(HttpStatus.OK).body(ex.getMessage());
     }
+
+    @ExceptionHandler(EmptyCartException.class)
+    public ResponseEntity<String> handleEmptyCartException(EmptyCartException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
 }

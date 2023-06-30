@@ -21,14 +21,18 @@ import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 
 import static emildobrev.Ecommerce.Store.constants.Constants.USER_NOT_FOUND;
 
 @Service
 @AllArgsConstructor
 @Slf4j
-public class ProductServiceImp implements  ProductService{
+public class ProductServiceImp implements ProductService {
     public static final String PRODUCT_NOT_FOUND_WITH_ID = "Product not found with id:";
     private ProductRepository productRepository;
     private ModelMapper modelMapper;
@@ -43,7 +47,6 @@ public class ProductServiceImp implements  ProductService{
                 pageable,
                 products::getTotalElements
         );
-
     }
 
     public ProductDTO getProductById(String id) {
@@ -117,7 +120,7 @@ public class ProductServiceImp implements  ProductService{
                 .toList();
     }
 
-    public CartResponse addProductToCart(String productId, String email) {
+    public CartResponse addProductToCart(String productId, int quantity, String email) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new NotFoundException(PRODUCT_NOT_FOUND_WITH_ID + productId));
@@ -127,7 +130,11 @@ public class ProductServiceImp implements  ProductService{
             userCart = new HashSet<>();
             user.setCart(userCart);
         }
-        userCart.add(modelMapper.map(product, ProductCartDTO.class));
+        ProductCartDTO productCartDTO = modelMapper.map(product, ProductCartDTO.class);
+        productCartDTO.setOrderQuantity(quantity);
+        productCartDTO.setPrice(productCartDTO.getPrice().multiply(BigDecimal.valueOf(quantity)));
+
+        userCart.add(productCartDTO);
         userRepository.save(user);
         return CartResponse.builder()
                 .cart(userCart)

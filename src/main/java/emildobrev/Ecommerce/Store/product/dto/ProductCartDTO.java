@@ -19,5 +19,6 @@ public class ProductCartDTO {
     private BigDecimal price;
     @NonNull
     private Category category;
+    @Builder.Default
     private int orderQuantity = 1;
 }

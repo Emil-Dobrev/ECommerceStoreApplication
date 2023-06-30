@@ -88,8 +88,10 @@ public class ProductController {
     }
 
     @PutMapping("/cart/add/{id}")
-    public ResponseEntity<CartResponse> addProductToCart(@PathVariable String id, Authentication authentication) {
-        return ResponseEntity.ok().body(productService.addProductToCart(id, authentication.getName()));
+    public ResponseEntity<CartResponse> addProductToCart(@PathVariable String id,
+                                                         @RequestParam("quantity") int quantity,
+                                                         Authentication authentication) {
+        return ResponseEntity.ok().body(productService.addProductToCart(id,quantity, authentication.getName()));
     }
 
     @PutMapping("/cart/remove/{id}")

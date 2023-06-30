@@ -19,6 +19,6 @@ public interface ProductService {
     void voteProduct(String id, Double rating, String email);
     Comment addCommentToProduct(Comment comment, String name);
     List<ProductDTO> getAllByNameRegex(String regex);
-    CartResponse addProductToCart(String productId, String email);
+    CartResponse addProductToCart(String productId,int quantity, String email);
     CartResponse removeProductFromCart(String id, String email);
 }

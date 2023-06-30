@@ -1,5 +1,6 @@
 package emildobrev.Ecommerce.Store.order;
 
+import emildobrev.Ecommerce.Store.exception.EmptyCartException;
 import emildobrev.Ecommerce.Store.exception.NotFoundException;
 import emildobrev.Ecommerce.Store.order.dto.CreateOrderDTO;
 import emildobrev.Ecommerce.Store.product.dto.ProductCartDTO;
@@ -13,6 +14,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.Collection;
 import java.util.HashSet;
 
 @Service
@@ -28,20 +33,24 @@ public class OrderServiceImp implements OrderService {
     public Order createOrder(@NotNull String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("User not found with ID: " + email));
-
+        var cart = user.getCart();
+        if(cart.isEmpty()) {
+            throw new EmptyCartException("Cannot create order with an empty cart.");
+        }
         var totalAmount = calculateTotalAmount(user.getCart());
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        Instant orderDate = currentDateTime.atOffset(ZoneOffset.UTC).toInstant();
 
-        CreateOrderDTO createOrderDTO = CreateOrderDTO.create(user.getId(), totalAmount);
         Order order = Order.builder()
-                .user(modelMapper.map(user, UserDto.class))
-                .totalAmount(createOrderDTO.totalAmount())
-                .orderDate(createOrderDTO.orderDate())
+                .userId(user.getId())
+                .totalAmount(totalAmount)
+                .orderDate(orderDate)
                 .products(user.getCart())
                 .build();
 
         user.setCart(new HashSet<>());
         userRepository.save(user);
-        return orderRepository.save(order);
+        return  orderRepository.save(order);
     }
 
     private BigDecimal calculateTotalAmount(HashSet<ProductCartDTO> productDTOS) {
