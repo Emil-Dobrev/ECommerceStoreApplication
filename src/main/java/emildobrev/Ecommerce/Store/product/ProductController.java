@@ -93,8 +93,7 @@ public class ProductController {
     }
 
     @PutMapping("/cart/remove/{id}")
-    public ResponseEntity<HttpStatus> removeProductFromCart(@PathVariable String id, Authentication authentication) {
-        productService.removeProductFromCart(id, authentication.getName());
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<CartResponse> removeProductFromCart(@PathVariable String id, Authentication authentication) {
+        return ResponseEntity.ok().body(  productService.removeProductFromCart(id, authentication.getName()));
     }
 }
