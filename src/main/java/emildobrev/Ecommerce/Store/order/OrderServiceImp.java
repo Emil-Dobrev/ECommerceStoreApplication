@@ -60,7 +60,7 @@ public class OrderServiceImp implements OrderService {
                 .orElseThrow(() -> new NotFoundException("Order not found with ID: " + orderId));
 
         if(!order.getUserId().equals(user.getId()) || user.getRoles().contains(Role.ADMIN)) {
-           throw new RuntimeException("You don't have permissions to cancel this order");
+           throw new AccessDeniedException("You don't have permissions to cancel this order");
         }
         order.setCanceled(true);
         orderRepository.save(order);
