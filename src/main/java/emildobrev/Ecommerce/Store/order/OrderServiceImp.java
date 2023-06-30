@@ -1,5 +1,6 @@
 package emildobrev.Ecommerce.Store.order;
 
+import emildobrev.Ecommerce.Store.exception.AccessDeniedException;
 import emildobrev.Ecommerce.Store.exception.EmptyCartException;
 import emildobrev.Ecommerce.Store.exception.NotFoundException;
 import emildobrev.Ecommerce.Store.product.dto.ProductCartDTO;
@@ -32,7 +33,7 @@ public class OrderServiceImp implements OrderService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("User not found with ID: " + email));
         var cart = user.getCart();
-        if(cart.isEmpty()) {
+        if (cart.isEmpty()) {
             throw new EmptyCartException("Cannot create order with an empty cart.");
         }
         var totalAmount = calculateTotalAmount(user.getCart());
@@ -48,7 +49,7 @@ public class OrderServiceImp implements OrderService {
 
         user.setCart(new HashSet<>());
         userRepository.save(user);
-        return  orderRepository.save(order);
+        return orderRepository.save(order);
     }
 
     @Override
@@ -59,8 +60,8 @@ public class OrderServiceImp implements OrderService {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new NotFoundException("Order not found with ID: " + orderId));
 
-        if(!order.getUserId().equals(user.getId()) || user.getRoles().contains(Role.ADMIN)) {
-           throw new AccessDeniedException("You don't have permissions to cancel this order");
+        if (!order.getUserId().equals(user.getId()) || user.getRoles().contains(Role.ADMIN)) {
+            throw new AccessDeniedException("You don't have permissions to cancel this order");
         }
         order.setCanceled(true);
         orderRepository.save(order);
