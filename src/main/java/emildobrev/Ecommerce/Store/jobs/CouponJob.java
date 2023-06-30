@@ -29,15 +29,16 @@ public class CouponJob {
     public void generateLoyalCoupons() {
         Instant oneMonthAgo = Instant.now().minus(1, ChronoUnit.MONTHS);
         var orders = orderRepository.findByCanceledFalse();
-
+        //Checking how much orders we have per user
         var userIdCounts = orders.stream()
                 .filter(order -> order.getOrderDate().isAfter(oneMonthAgo))
                 .collect(Collectors.groupingBy(Order::getUserId, Collectors.counting()));
-
+        
+        //Generating coupon for users which have made 2 orders for past month
         List<String> repeatingUserIds = userIdCounts.entrySet().stream()
                 .filter(entry -> entry.getValue() > 1)
                 .map(Map.Entry::getKey)
-                .collect(Collectors.toList());
+                .toList();
 
         repeatingUserIds.forEach(userId -> {
             Optional<User> user = userRepository.findById(userId);
