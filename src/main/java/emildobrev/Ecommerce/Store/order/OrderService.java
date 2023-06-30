@@ -2,9 +2,10 @@ package emildobrev.Ecommerce.Store.order;
 
 import lombok.NonNull;
 
-import java.math.BigDecimal;
 
 public interface OrderService {
 
     Order createOrder(@NonNull  String email);
+
+    void cancelOrder(String email, String orderId);
 }

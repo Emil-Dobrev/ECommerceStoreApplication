@@ -4,6 +4,7 @@ import emildobrev.Ecommerce.Store.exception.EmptyCartException;
 import emildobrev.Ecommerce.Store.exception.NotFoundException;
 import emildobrev.Ecommerce.Store.order.dto.CreateOrderDTO;
 import emildobrev.Ecommerce.Store.product.dto.ProductCartDTO;
+import emildobrev.Ecommerce.Store.user.Role;
 import emildobrev.Ecommerce.Store.user.User;
 import emildobrev.Ecommerce.Store.user.UserRepository;
 import emildobrev.Ecommerce.Store.user.dto.UserDto;
@@ -51,6 +52,21 @@ public class OrderServiceImp implements OrderService {
         user.setCart(new HashSet<>());
         userRepository.save(user);
         return  orderRepository.save(order);
+    }
+
+    @Override
+    public void cancelOrder(String email, String orderId) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException("User not found with ID: " + email));
+
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new NotFoundException("Order not found with ID: " + orderId));
+
+        if(!order.getUserId().equals(user.getId()) || user.getRoles().contains(Role.ADMIN)) {
+           throw new RuntimeException("You don't have permissions to cancel this order");
+        }
+        order.setCanceled(true);
+        orderRepository.save(order);
     }
 
     private BigDecimal calculateTotalAmount(HashSet<ProductCartDTO> productDTOS) {

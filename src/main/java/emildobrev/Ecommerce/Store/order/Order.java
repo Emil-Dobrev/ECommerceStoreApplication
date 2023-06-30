@@ -25,4 +25,5 @@ public class Order {
     private Instant orderDate;
     @NonNull
     private HashSet<ProductCartDTO> products;
+    private boolean isCanceled = false;
 }
