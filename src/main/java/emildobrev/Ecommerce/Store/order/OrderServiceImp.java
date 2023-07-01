@@ -2,6 +2,7 @@ package emildobrev.Ecommerce.Store.order;
 
 import emildobrev.Ecommerce.Store.coupons.Coupon;
 import emildobrev.Ecommerce.Store.coupons.CouponRepository;
+import emildobrev.Ecommerce.Store.email.EmailService;
 import emildobrev.Ecommerce.Store.exception.AccessDeniedException;
 import emildobrev.Ecommerce.Store.exception.EmptyCartException;
 import emildobrev.Ecommerce.Store.exception.NotFoundException;
@@ -9,6 +10,7 @@ import emildobrev.Ecommerce.Store.product.dto.ProductCartDTO;
 import emildobrev.Ecommerce.Store.user.Role;
 import emildobrev.Ecommerce.Store.user.User;
 import emildobrev.Ecommerce.Store.user.UserRepository;
+import emildobrev.Ecommerce.Store.util.Utils;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.modelmapper.ModelMapper;
@@ -17,10 +19,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.sql.Date;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.HashSet;
+
+import static emildobrev.Ecommerce.Store.constants.Constants.*;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +34,7 @@ public class OrderServiceImp implements OrderService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final CouponRepository couponRepository;
-    private final ModelMapper modelMapper;
+    private final EmailService emailService;
 
     @Override
     @Transactional
@@ -50,7 +55,8 @@ public class OrderServiceImp implements OrderService {
                 .userId(user.getId())
                 .orderDate(orderDate)
                 .totalAmount(totalAmount)
-                .products(cart);
+                .products(cart)
+                .orderNumber(OrderNumberGenerator.generateOrderNumber());
 //
         if (couponId != null) {
             Coupon coupon = couponRepository.findById(couponId)
@@ -61,17 +67,22 @@ public class OrderServiceImp implements OrderService {
                 BigDecimal discountAmount = totalAmount.multiply(BigDecimal.valueOf(discountPercentage / 100.0));
                 totalAmount = totalAmount.subtract(discountAmount);
 
+
                 orderBuilder.totalAmount(totalAmount.setScale(2, RoundingMode.UP))
-                                .totalDiscount(discountAmount.setScale(2, RoundingMode.UP))
-                                        .couponId(couponId);
+                        .totalDiscount(discountAmount.setScale(2, RoundingMode.UP))
+                        .couponId(couponId);
                 HashSet<Coupon> coupons = user.getCoupons();
                 coupons.remove(coupon);
                 user.setCoupons(coupons);
+                coupon.setUsed(true);
             }
         }
         user.setCart(new HashSet<>());
         userRepository.save(user);
-        return orderRepository.save(orderBuilder.build());
+
+        Order order = orderRepository.save(orderBuilder.build());
+        emailService.sendEmailForCoupon(generateEmailMetaInformation(user, order));
+        return order;
     }
 
     @Override
@@ -100,5 +111,35 @@ public class OrderServiceImp implements OrderService {
         return user.getCoupons().contains(coupon) &&
                 coupon.getValidFrom().isBefore(now) &&
                 coupon.getValidTo().isAfter(now);
+    }
+
+    private EmailMetaInformation generateEmailMetaInformation(User user, Order order) {
+        String fullName = Utils.getFullName(user);
+
+        return EmailMetaInformation.builder()
+                .fullName(fullName)
+                .subject("Your Order Confirmation - Order #" + order.getOrderNumber())
+                .title(EMAIL_TITLE_ORDER)
+                .email(user.getEmail())
+                .text("""
+                        Dear %s,
+                                        
+                        Thank you for choosing our services! We are pleased to inform you that your order has been successfully placed. Below are the details of your order:
+                                        
+                        Order Number: %s
+                        Order Date: %s
+                        Total Amount: %.2f
+                                        
+                        Please review the order details and ensure that all information is accurate. If you have any questions or need further assistance, please don't hesitate to contact our customer support team.
+                                        
+                        We appreciate your business and look forward to serving you.
+                                        
+                        Best regards,
+                        """.formatted(
+                        fullName,
+                        order.getOrderNumber(),
+                        order.getOrderDate(),
+                        order.getTotalAmount()))
+                .build();
     }
 }

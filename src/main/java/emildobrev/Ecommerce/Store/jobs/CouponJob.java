@@ -2,17 +2,21 @@ package emildobrev.Ecommerce.Store.jobs;
 
 import emildobrev.Ecommerce.Store.coupons.Coupon;
 import emildobrev.Ecommerce.Store.coupons.CouponRepository;
+import emildobrev.Ecommerce.Store.email.EmailService;
 import emildobrev.Ecommerce.Store.enums.CouponsType;
+import emildobrev.Ecommerce.Store.order.EmailMetaInformation;
 import emildobrev.Ecommerce.Store.order.Order;
 import emildobrev.Ecommerce.Store.order.OrderRepository;
 import emildobrev.Ecommerce.Store.user.User;
 import emildobrev.Ecommerce.Store.user.UserRepository;
+import emildobrev.Ecommerce.Store.util.Utils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Date;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
@@ -20,6 +24,10 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
+
+
+import static emildobrev.Ecommerce.Store.constants.Constants.EMAIL_TITLE_COUPON;
+import static emildobrev.Ecommerce.Store.constants.Constants.SUBJECT_COUPON;
 
 @Component
 @RequiredArgsConstructor
@@ -29,8 +37,10 @@ public class CouponJob {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private  final CouponRepository couponRepository;
+    private final EmailService emailService;
 
-    @Scheduled(cron = "@monthly")
+//    @Scheduled(cron = "@monthly")
+@Scheduled(cron = "0 * * * * *")
     @Transactional
     public void generateLoyalCoupons() {
         log.info("Generate loyalty coupons job started");
@@ -64,6 +74,7 @@ public class CouponJob {
                 userCoupons.add(coupon);
                 user.get().setCoupons(userCoupons);
                 userRepository.save(user.get());
+                emailService.sendEmailForCoupon(  generateEmailMetaInformation(user.get(), coupon));
             }
         });
     }
@@ -79,6 +90,26 @@ public class CouponJob {
         int minDiscount = 5;
         int maxDiscount = 15;
         return ThreadLocalRandom.current().nextInt(minDiscount, maxDiscount + 1);
+    }
+
+    private EmailMetaInformation generateEmailMetaInformation(User user, Coupon coupon) {
+            String fullName = Utils.getFullName(user);
+        return EmailMetaInformation.builder()
+                .fullName(fullName)
+                .subject(SUBJECT_COUPON)
+                .title(EMAIL_TITLE_COUPON)
+                .email(user.getEmail())
+                .text( """
+                    Dear %s,
+                    We hope this email finds you in good spirits! We are delighted to inform you that as a token of our appreciation for your loyalty and continuous support, you have won a new discount coupon.
+                                    
+                    Coupon is valid from: %s and valid until: %s
+                    Discount: %.2f%%
+                    """.formatted(fullName,
+                        java.sql.Date.from(coupon.getValidFrom()),
+                        Date.from(coupon.getValidTo()),
+                        coupon.getDiscount()))
+                .build();
     }
 
 }

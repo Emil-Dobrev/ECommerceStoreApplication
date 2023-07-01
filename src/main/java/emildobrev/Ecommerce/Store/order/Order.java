@@ -29,4 +29,5 @@ public class Order {
     private String couponId;
     private BigDecimal totalDiscount;
     private boolean isCanceled = false;
+    private String orderNumber;
 }

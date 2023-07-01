@@ -4,6 +4,7 @@ import emildobrev.Ecommerce.Store.auth.dto.AuthenticationRequest;
 import emildobrev.Ecommerce.Store.auth.dto.AuthenticationResponse;
 import emildobrev.Ecommerce.Store.auth.dto.RegisterRequest;
 import emildobrev.Ecommerce.Store.config.JwtService;
+import emildobrev.Ecommerce.Store.email.EmailService;
 import emildobrev.Ecommerce.Store.exception.EmailAlreadyTakenException;
 import emildobrev.Ecommerce.Store.user.Role;
 import emildobrev.Ecommerce.Store.user.User;
