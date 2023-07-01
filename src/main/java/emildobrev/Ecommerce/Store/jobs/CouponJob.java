@@ -8,6 +8,7 @@ import emildobrev.Ecommerce.Store.order.OrderRepository;
 import emildobrev.Ecommerce.Store.user.User;
 import emildobrev.Ecommerce.Store.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class CouponJob {
 
     private final OrderRepository orderRepository;
@@ -27,13 +29,14 @@ public class CouponJob {
 
     @Scheduled(cron = "@monthly")
     public void generateLoyalCoupons() {
+        log.info("Generate loyalty coupons job started");
         Instant oneMonthAgo = Instant.now().minus(1, ChronoUnit.MONTHS);
         var orders = orderRepository.findByCanceledFalse();
         //Checking how much orders we have per user
         var userIdCounts = orders.stream()
                 .filter(order -> order.getOrderDate().isAfter(oneMonthAgo))
                 .collect(Collectors.groupingBy(Order::getUserId, Collectors.counting()));
-        
+
         //Generating coupon for users which have made 2 orders for past month
         List<String> repeatingUserIds = userIdCounts.entrySet().stream()
                 .filter(entry -> entry.getValue() > 1)
@@ -62,6 +65,7 @@ public class CouponJob {
 
     @Scheduled(cron = "@midnight")
     public void deleteExpiredCoupons() {
+        log.info("Delete expired coupons job started");
         var expiredCoupons = couponRepository.findByValidToBefore(Instant.now());
         expiredCoupons.ifPresent(couponRepository::deleteAll);
     }
