@@ -13,13 +13,11 @@ import emildobrev.Ecommerce.Store.user.UserRepository;
 import emildobrev.Ecommerce.Store.util.Utils;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.sql.Date;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -81,7 +79,7 @@ public class OrderServiceImp implements OrderService {
         userRepository.save(user);
 
         Order order = orderRepository.save(orderBuilder.build());
-        emailService.sendEmailForCoupon(generateEmailMetaInformation(user, order));
+        emailService.sendEmail(generateEmailMetaInformation(user, order));
         return order;
     }
 
@@ -120,6 +118,7 @@ public class OrderServiceImp implements OrderService {
                 .fullName(fullName)
                 .subject("Your Order Confirmation - Order #" + order.getOrderNumber())
                 .title(EMAIL_TITLE_ORDER)
+                .header(EMAIL_HEADER_ORDER)
                 .email(user.getEmail())
                 .text("""
                         Dear %s,

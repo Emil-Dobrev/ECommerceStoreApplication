@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
@@ -25,9 +26,7 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
-
-import static emildobrev.Ecommerce.Store.constants.Constants.EMAIL_TITLE_COUPON;
-import static emildobrev.Ecommerce.Store.constants.Constants.SUBJECT_COUPON;
+import static emildobrev.Ecommerce.Store.constants.Constants.*;
 
 @Component
 @RequiredArgsConstructor
@@ -36,11 +35,10 @@ public class CouponJob {
 
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
-    private  final CouponRepository couponRepository;
+    private final CouponRepository couponRepository;
     private final EmailService emailService;
 
-//    @Scheduled(cron = "@monthly")
-@Scheduled(cron = "0 * * * * *")
+    @Scheduled(cron = "@monthly")
     @Transactional
     public void generateLoyalCoupons() {
         log.info("Generate loyalty coupons job started");
@@ -74,7 +72,7 @@ public class CouponJob {
                 userCoupons.add(coupon);
                 user.get().setCoupons(userCoupons);
                 userRepository.save(user.get());
-                emailService.sendEmailForCoupon(  generateEmailMetaInformation(user.get(), coupon));
+                emailService.sendEmail(generateEmailMetaInformation(user.get(), coupon));
             }
         });
     }
@@ -93,21 +91,27 @@ public class CouponJob {
     }
 
     private EmailMetaInformation generateEmailMetaInformation(User user, Coupon coupon) {
-            String fullName = Utils.getFullName(user);
+        String fullName = Utils.getFullName(user);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+
+        String validFrom = dateFormat.format(Date.from(coupon.getValidFrom()));
+        String validTo = dateFormat.format(Date.from(coupon.getValidTo()));
         return EmailMetaInformation.builder()
                 .fullName(fullName)
                 .subject(SUBJECT_COUPON)
                 .title(EMAIL_TITLE_COUPON)
+                .header(EMAIL_HEADER_COUPON)
                 .email(user.getEmail())
-                .text( """
-                    Dear %s,
-                    We hope this email finds you in good spirits! We are delighted to inform you that as a token of our appreciation for your loyalty and continuous support, you have won a new discount coupon.
-                                    
-                    Coupon is valid from: %s and valid until: %s
-                    Discount: %.2f%%
-                    """.formatted(fullName,
-                        java.sql.Date.from(coupon.getValidFrom()),
-                        Date.from(coupon.getValidTo()),
+                .text("""
+                        Dear %s,
+                        We hope this email finds you in good spirits! We are delighted to inform you that as a token of our appreciation for your loyalty and continuous support, you have won a new discount coupon.
+                                        
+                        Coupon is valid from: %s and valid until: %s
+                        Discount: %.2f%%
+                        """.formatted(
+                        fullName,
+                        validFrom,
+                        validTo,
                         coupon.getDiscount()))
                 .build();
     }

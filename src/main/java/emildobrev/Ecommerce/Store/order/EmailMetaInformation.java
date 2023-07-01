@@ -19,4 +19,6 @@ public class EmailMetaInformation {
     private String subject;
     @NonNull
     private String email;
+    @NonNull
+    private String header;
 }
