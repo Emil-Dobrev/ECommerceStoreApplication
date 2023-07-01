@@ -30,8 +30,7 @@ public class CouponJob {
     private final UserRepository userRepository;
     private  final CouponRepository couponRepository;
 
-    //@Scheduled(cron = "@monthly")
-    @Scheduled(cron = "0 * * * * *")
+    @Scheduled(cron = "@monthly")
     @Transactional
     public void generateLoyalCoupons() {
         log.info("Generate loyalty coupons job started");
