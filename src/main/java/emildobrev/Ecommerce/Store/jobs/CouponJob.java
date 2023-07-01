@@ -11,8 +11,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -27,14 +30,17 @@ public class CouponJob {
     private final UserRepository userRepository;
     private  final CouponRepository couponRepository;
 
-    @Scheduled(cron = "@monthly")
+    //@Scheduled(cron = "@monthly")
+    @Scheduled(cron = "0 * * * * *")
+    @Transactional
     public void generateLoyalCoupons() {
         log.info("Generate loyalty coupons job started");
-        Instant oneMonthAgo = Instant.now().minus(1, ChronoUnit.MONTHS);
-        var orders = orderRepository.findByCanceledFalse();
+        LocalDate oneMonthAgo = LocalDate.now().minusMonths(1);
+        Instant oneMonthAgoInstant = oneMonthAgo.atStartOfDay(ZoneOffset.UTC).toInstant();
+        var orders = orderRepository.findByIsCanceledFalse();
         //Checking how much orders we have per user
         var userIdCounts = orders.stream()
-                .filter(order -> order.getOrderDate().isAfter(oneMonthAgo))
+                .filter(order -> order.getOrderDate().isAfter(oneMonthAgoInstant))
                 .collect(Collectors.groupingBy(Order::getUserId, Collectors.counting()));
 
         //Generating coupon for users which have made 2 orders for past month

@@ -1,0 +1,10 @@
+
+‰
+java:S13199"mThe return type of this method should be an interface such as "Set" rather than the implementation "HashSet".(ïˆÓe8§Éñ1
+}
+java:S13199"aThe type of "cart" should be an interface such as "Set" rather than the implementation "HashSet".(ïˆÓe8§Éñ1
+u	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(»àÃg8¨Éñ1
+C
+java:S3864;"!Remove this use of "Stream.peek".(Œë³Šıÿÿÿÿ8²Éñ1
+j
+java:S1128"NRemove this unused import 'emildobrev.Ecommerce.Store.product.dto.ProductDTO'.(Ğƒú28ğ…èñ1
