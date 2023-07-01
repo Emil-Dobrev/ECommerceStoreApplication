@@ -36,7 +36,7 @@ public class CouponServiceTest {
 
     @BeforeEach
     public void setUp() {
-        couponService = new CouponServiceImp(userRepository, couponRepository, modelMapper);
+        couponService = new CouponServiceImp(couponRepository, modelMapper);
     }
 
 

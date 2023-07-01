@@ -60,11 +60,10 @@ public class OrderServiceImp implements OrderService {
             Coupon coupon = couponRepository.findById(couponId)
                     .orElseThrow(() -> new NotFoundException("Coupon not found with ID: " + couponId));
             //check if User contains this coupon and if now is after validFrom and now is before validTo
-            if (isValidCoupon(user, coupon)) {
+            if (Utils.isValidCoupon(user, coupon)) {
                 double discountPercentage = coupon.getDiscount();
                 BigDecimal discountAmount = totalAmount.multiply(BigDecimal.valueOf(discountPercentage / 100.0));
                 totalAmount = totalAmount.subtract(discountAmount);
-
 
                 orderBuilder.totalAmount(totalAmount.setScale(2, RoundingMode.UP))
                         .totalDiscount(discountAmount.setScale(2, RoundingMode.UP))
@@ -104,12 +103,7 @@ public class OrderServiceImp implements OrderService {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    private boolean isValidCoupon(User user, Coupon coupon) {
-        Instant now = Instant.now();
-        return user.getCoupons().contains(coupon) &&
-                coupon.getValidFrom().isBefore(now) &&
-                coupon.getValidTo().isAfter(now);
-    }
+
 
     private EmailMetaInformation generateEmailMetaInformation(User user, Order order) {
         String fullName = Utils.getFullName(user);

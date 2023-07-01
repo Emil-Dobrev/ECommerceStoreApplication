@@ -24,35 +24,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CouponServiceImp implements CouponService {
 
-    private final UserRepository userRepository;
     private final CouponRepository couponRepository;
     private final ModelMapper modelMapper;
-
-
-    @Transactional
-    public boolean useCoupon(@NonNull String email, @NonNull Coupon coupon) {
-        Coupon coup = couponRepository.findById(coupon.getId())
-                .orElseThrow(() -> new NotFoundException("Coupon not found"));
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException(""));
-
-        Instant now = Instant.now();
-
-        //check user contain  coupon and if it is valid
-        if (user.getCoupons().contains(coupon)
-                && now.isAfter(coup.getValidFrom())
-                && now.isBefore(coup.getValidTo())
-        ) {
-
-            user.setCart(reducePrice(user.getCart(), coupon));
-            HashSet<Coupon> userCoupons = user.getCoupons();
-            userCoupons.remove(coup);
-            user.setCoupons(userCoupons);
-            userRepository.save(user);
-            return true;
-        }
-        return false;
-    }
 
     public HashSet<ProductCartDTO> reducePrice(@NotNull HashSet<ProductCartDTO> cart, Coupon coupon) {
         return cart.stream()
