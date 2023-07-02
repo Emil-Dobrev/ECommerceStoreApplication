@@ -1,7 +1,7 @@
 # Read Me First
 The following was discovered as part of building this project:
 
-* The original package name 'emildobrev.E-commerce Store' is invalid and this project uses 'emildobrev.Ecommerce.Store' instead.
+* The original package name 'emildobrev.E-commerce Store' is invalid and this project uses 'emildobrev.ecommerce.store' instead.
 
 # Getting Started
 

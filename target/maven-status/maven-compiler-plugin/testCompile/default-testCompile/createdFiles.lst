@@ -1,0 +1,5 @@
+emildobrev/ecommerce/store/integration/jobs/CouponJobsTest.class
+emildobrev/ecommerce/store/unit/coupon/CouponServiceTest.class
+emildobrev/ecommerce/store/integration/ProductControllerIntegrationTest.class
+emildobrev/ecommerce/store/ECommerceStoreApplicationTests.class
+emildobrev/ecommerce/store/unit/product/ProductServiceTest.class
