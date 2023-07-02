@@ -28,7 +28,7 @@ public class EmailServiceImp implements EmailService {
     public static final String PLACEHOLDER_TITLE = "PLACEHOLDER_TITLE";
     public static final String PLACEHOLDER_HEADER = "PLACEHOLDER_HEADER";
     private final String SENDER_EMAIL = "dobrev93sl@gmail.com";
-    private static final String STATIC_SIGNAL_EMAIL_TEMPLATE_HTML = "static/CouponTemplate.html";
+    private static final String STATIC_EMAIL_TEMPLATE_HTML = "static/EmailTemplate.html";
     private final JavaMailSender javaMailSender;
 
 
@@ -50,7 +50,7 @@ public class EmailServiceImp implements EmailService {
 
 
     private String buildEmail(EmailMetaInformation emailMetaInformation) throws IOException {
-        return StreamUtils.copyToString(new ClassPathResource(STATIC_SIGNAL_EMAIL_TEMPLATE_HTML).getInputStream(), StandardCharsets.UTF_8)
+        return StreamUtils.copyToString(new ClassPathResource(STATIC_EMAIL_TEMPLATE_HTML).getInputStream(), StandardCharsets.UTF_8)
                 .replace(PLACEHOLDER_TITLE, emailMetaInformation.getTitle())
                 .replace(PLACEHOLDER_HEADER, emailMetaInformation.getHeader())
                 .replace(TEXT_PLACEHOLDER, emailMetaInformation.getText());
