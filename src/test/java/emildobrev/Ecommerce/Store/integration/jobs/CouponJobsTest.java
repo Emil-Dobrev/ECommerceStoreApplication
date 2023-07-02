@@ -2,7 +2,7 @@ package emildobrev.Ecommerce.Store.integration.jobs;
 
 import emildobrev.Ecommerce.Store.coupons.Coupon;
 import emildobrev.Ecommerce.Store.coupons.CouponRepository;
-import emildobrev.Ecommerce.Store.coupons.CouponServiceImp;
+import emildobrev.Ecommerce.Store.email.EmailService;
 import emildobrev.Ecommerce.Store.enums.CouponsType;
 import emildobrev.Ecommerce.Store.jobs.CouponJob;
 import emildobrev.Ecommerce.Store.order.OrderRepository;
@@ -29,12 +29,14 @@ public class CouponJobsTest {
     private  UserRepository userRepository;
     @Mock
     private  CouponRepository couponRepository;
+    @Mock
+    private EmailService emailService;
     @InjectMocks
     private CouponJob couponJob;
 
     @BeforeEach
     public void setUp() {
-        couponJob = new CouponJob(orderRepository,userRepository, couponRepository);
+        couponJob = new CouponJob(orderRepository, userRepository, couponRepository, emailService);
     }
 
     @Test
