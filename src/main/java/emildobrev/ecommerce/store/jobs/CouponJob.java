@@ -72,7 +72,7 @@ public class CouponJob {
                 userCoupons.add(coupon);
                 user.get().setCoupons(userCoupons);
                 userRepository.save(user.get());
-                emailService.sendEmail(generateEmailMetaInformation(user.get(), coupon));
+                emailService.sendEmail(generateEmailMetaInformation(user.get(), coupon, SUBJECT_COUPON, EMAIL_TEXT_COUPON));
             }
         });
     }
@@ -83,8 +83,10 @@ public class CouponJob {
         var expiredCoupons = couponRepository.findByValidToBefore(Instant.now());
         expiredCoupons.ifPresent(couponRepository::deleteAll);
     }
+    
 
-    @Scheduled(cron = "0 * * * * *")
+    @Scheduled(cron = "0 0 1 * * *")     // runs at: 01:00 am every day
+    @Transactional
     public void generateBirthdayCoupons() {
         log.info("Generates birthday coupons job started");
         // Get the current date
@@ -95,7 +97,27 @@ public class CouponJob {
         int currentMonth = currentDate.getMonth().getValue();
 
         var users = userRepository.findByBirthdateDayAndMonth(currentDay, currentMonth);
+        users.ifPresent(birthdayUsers -> birthdayUsers.forEach(user -> {
+            var birtdayCoupon = Coupon.builder()
+                    .validFrom(Instant.now())
+                    .validTo(Instant.now().plus(14, ChronoUnit.DAYS))
+                    .code(CouponsType.BIRTHDAY)
+                    .discount(15.0)
+                    .isUsed(false)
+                    .build();
+            couponRepository.save(birtdayCoupon);
+
+            var userCoupons = user.getCoupons();
+            userCoupons.add(birtdayCoupon);
+            userRepository.save(user);
+            emailService.sendEmail(generateEmailMetaInformation(
+                    user,
+                    birtdayCoupon,
+                    SUBJECT_COUPON_BIRTHDAY,
+                    EMAIL_TEXT_COUPON_BIRTHDAY));
+        }));
     }
+
 
     private int generateRandomDiscount() {
         int minDiscount = 5;
@@ -103,7 +125,7 @@ public class CouponJob {
         return ThreadLocalRandom.current().nextInt(minDiscount, maxDiscount + 1);
     }
 
-    private EmailMetaInformation generateEmailMetaInformation(User user, Coupon coupon) {
+    private EmailMetaInformation generateEmailMetaInformation(User user, Coupon coupon, String subject, String text) {
         String fullName = Utils.getFullName(user);
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
@@ -111,18 +133,19 @@ public class CouponJob {
         String validTo = dateFormat.format(Date.from(coupon.getValidTo()));
         return EmailMetaInformation.builder()
                 .fullName(fullName)
-                .subject(SUBJECT_COUPON)
+                .subject(subject)
                 .title(EMAIL_TITLE_COUPON)
                 .header(EMAIL_HEADER_COUPON)
                 .email(user.getEmail())
                 .text("""
                         Dear %s,
-                        We hope this email finds you in good spirits! We are delighted to inform you that as a token of our appreciation for your loyalty and continuous support, you have won a new discount coupon.
-                                        
+                        %s
+                                            
                         Coupon is valid from: %s and valid until: %s
                         Discount: %.2f%%
                         """.formatted(
                         fullName,
+                        text,
                         validFrom,
                         validTo,
                         coupon.getDiscount()))
