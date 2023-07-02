@@ -59,20 +59,8 @@ public class OrderServiceImp implements OrderService {
         if (couponId != null) {
             Coupon coupon = couponRepository.findById(couponId)
                     .orElseThrow(() -> new NotFoundException("Coupon not found with ID: " + couponId));
-            //check if User contains this coupon and if now is after validFrom and now is before validTo
-            if (Utils.isValidCoupon(user, coupon)) {
-                double discountPercentage = coupon.getDiscount();
-                BigDecimal discountAmount = totalAmount.multiply(BigDecimal.valueOf(discountPercentage / 100.0));
-                totalAmount = totalAmount.subtract(discountAmount);
 
-                orderBuilder.totalAmount(totalAmount.setScale(2, RoundingMode.UP))
-                        .totalDiscount(discountAmount.setScale(2, RoundingMode.UP))
-                        .couponId(couponId);
-                HashSet<Coupon> coupons = user.getCoupons();
-                coupons.remove(coupon);
-                user.setCoupons(coupons);
-                coupon.setUsed(true);
-            }
+            useCouponDiscount(couponId, user, totalAmount, orderBuilder, coupon);
         }
         user.setCart(new HashSet<>());
         userRepository.save(user);
@@ -81,6 +69,23 @@ public class OrderServiceImp implements OrderService {
         emailService.sendEmail(generateEmailMetaInformation(user, order));
         return order;
     }
+
+    private void useCouponDiscount(String couponId, User user, BigDecimal totalAmount, Order.OrderBuilder orderBuilder, Coupon coupon) {
+        //check if User contains this coupon and if now is after validFrom and now is before validTo
+        if (Utils.isValidCoupon(user, coupon)) {
+            BigDecimal discountAmount = getDiscountAmount(totalAmount, coupon);
+            totalAmount = totalAmount.subtract(discountAmount);
+
+            orderBuilder.totalAmount(totalAmount.setScale(2, RoundingMode.UP))
+                    .totalDiscount(discountAmount.setScale(2, RoundingMode.UP))
+                    .couponId(couponId);
+            HashSet<Coupon> coupons = user.getCoupons();
+            coupons.remove(coupon);
+            user.setCoupons(coupons);
+            coupon.setUsed(true);
+        }
+    }
+
 
     @Override
     public void cancelOrder(String email, String orderId) {
@@ -102,8 +107,6 @@ public class OrderServiceImp implements OrderService {
                 .map(ProductCartDTO::getPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
-
-
 
     private EmailMetaInformation generateEmailMetaInformation(User user, Order order) {
         String fullName = Utils.getFullName(user);
@@ -134,5 +137,10 @@ public class OrderServiceImp implements OrderService {
                         order.getOrderDate(),
                         order.getTotalAmount()))
                 .build();
+    }
+
+    private BigDecimal getDiscountAmount(BigDecimal totalAmount, Coupon coupon) {
+        double discountPercentage = coupon.getDiscount();
+        return totalAmount.multiply(BigDecimal.valueOf(discountPercentage / 100.0));
     }
 }
