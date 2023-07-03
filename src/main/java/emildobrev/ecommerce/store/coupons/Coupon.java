@@ -1,19 +1,20 @@
 package emildobrev.ecommerce.store.coupons;
 
 import emildobrev.ecommerce.store.enums.CouponsType;
+import emildobrev.ecommerce.store.enums.DiscountType;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.Instant;
 
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @Data
 @Builder
 @Document(collection = "coupons")
 public class Coupon {
-
+    
     @Id
     private String id;
     @NonNull
@@ -24,5 +25,7 @@ public class Coupon {
     private Instant validFrom;
     @NonNull
     private Instant validTo;
+    @NonNull
+    DiscountType discountType;
     private boolean isUsed = false;
 }

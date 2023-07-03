@@ -1,9 +1,11 @@
 package emildobrev.ecommerce.store.jobs;
 
 import emildobrev.ecommerce.store.coupons.Coupon;
+import emildobrev.ecommerce.store.coupons.CouponFactory;
 import emildobrev.ecommerce.store.coupons.CouponRepository;
 import emildobrev.ecommerce.store.email.EmailService;
 import emildobrev.ecommerce.store.enums.CouponsType;
+import emildobrev.ecommerce.store.enums.DiscountType;
 import emildobrev.ecommerce.store.order.EmailMetaInformation;
 import emildobrev.ecommerce.store.order.Order;
 import emildobrev.ecommerce.store.order.OrderRepository;
@@ -60,12 +62,19 @@ public class CouponJob {
             var user = userRepository.findById(userId);
 
             if (user.isPresent()) {
-                Coupon coupon = Coupon.builder()
-                        .code(CouponsType.LOYALTY)
-                        .discount((double) generateRandomDiscount())
-                        .validFrom(Instant.now())
-                        .validTo(Instant.now().plus(14, ChronoUnit.DAYS))
-                        .build();
+//                Coupon coupon = Coupon.builder()
+//                        .code(CouponsType.LOYALTY)
+//                        .discount((double) generateRandomDiscount())
+//                        .validFrom(Instant.now())
+//                        .validTo(Instant.now().plus(14, ChronoUnit.DAYS))
+//                        .build();
+                Coupon coupon = CouponFactory.createCoupon(
+                        DiscountType.PERCENTAGE,
+                        CouponsType.LOYALTY,
+                        (double) generateRandomDiscount(),
+                        Instant.now(),
+                        Instant.now().plus(14, ChronoUnit.DAYS)
+                );
                 couponRepository.save(coupon);
 
                 var userCoupons = user.get().getCoupons();
@@ -83,7 +92,7 @@ public class CouponJob {
         var expiredCoupons = couponRepository.findByValidToBefore(Instant.now());
         expiredCoupons.ifPresent(couponRepository::deleteAll);
     }
-    
+
 
     @Scheduled(cron = "0 0 1 * * *")     // runs at: 01:00 am every day
     @Transactional

@@ -1,0 +1,5 @@
+
+v	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(¿öà‹8ëí‘ž‘1
+s	java:S116"WRename this field "SENDER_EMAIL" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ˆ…¢£8÷í‘ž‘1
+>
+java:S1170"!Make this final field static too.(ˆ…¢£8÷í‘ž‘1

@@ -1,6 +1,7 @@
 package emildobrev.ecommerce.store.coupons;
 
 import emildobrev.ecommerce.store.coupons.dto.CreateCouponDTO;
+import emildobrev.ecommerce.store.enums.DiscountType;
 import emildobrev.ecommerce.store.product.dto.ProductCartDTO;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -24,18 +25,35 @@ public class CouponServiceImp implements CouponService {
         return cart.stream()
                 .peek(product -> {
                     BigDecimal originalPrice = product.getPrice();
-                    BigDecimal discountPercentage = BigDecimal.valueOf(coupon.getDiscount());
-                    BigDecimal discountAmount = originalPrice.multiply(discountPercentage)
-                            .divide(new BigDecimal(100), 2, RoundingMode.HALF_UP);
+                    BigDecimal discount = BigDecimal.valueOf(coupon.getDiscount());
+                    BigDecimal discountAmount = getDiscountAmount(
+                            coupon.discountType,
+                            originalPrice,
+                            discount
+                    );
                     product.setPrice(originalPrice.subtract(discountAmount).setScale(2, RoundingMode.HALF_UP));
                 })
                 .collect(Collectors.toCollection(HashSet::new));
     }
 
     @Override
-    public Coupon createCoupon(@NonNull CreateCouponDTO createCouponDTO) {
+    public Coupon saveCouponToDb(@NonNull CreateCouponDTO createCouponDTO) {
         Coupon coupon = modelMapper.map(createCouponDTO, Coupon.class);
-       return couponRepository.save(coupon);
+        return couponRepository.save(coupon);
+    }
 
+    private BigDecimal getDiscountAmount(DiscountType discountType, BigDecimal originalPrice, BigDecimal discount) {
+        switch (discountType) {
+            case PERCENTAGE -> {
+                return originalPrice.multiply(discount)
+                        .divide(new BigDecimal(100), 2, RoundingMode.HALF_UP);
+            }
+            case FIXED_AMOUNT -> {
+                return originalPrice.subtract(discount);
+            }
+            default -> {
+                throw new IllegalArgumentException("Invalid coupon type: " + discountType);
+            }
+        }
     }
 }
