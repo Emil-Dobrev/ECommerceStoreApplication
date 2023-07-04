@@ -32,7 +32,7 @@ public class Product {
     private List<Comment> comments = new ArrayList<>();
     private Category category;
     private double rating;
-    private HashMap<String, Double> votedUsers;
+    private HashMap<String, Double> votedUsers = new HashMap<>();
 
 
     public void addComment(Comment comment){
@@ -41,7 +41,6 @@ public class Product {
     public void addVote(String id, Double rating) {
         votedUsers.put(id, rating);
     }
-
     public void removeVote(String id) {
         votedUsers.remove(id);
     }

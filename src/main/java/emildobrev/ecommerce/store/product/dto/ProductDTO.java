@@ -24,6 +24,7 @@ public class ProductDTO {
     private BigDecimal price;
     @NonNull
     private Category category;
+    @NonNull
     private int quantityInWarehouse;
     private List<Comment> comments;
 }

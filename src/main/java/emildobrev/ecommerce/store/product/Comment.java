@@ -1,6 +1,7 @@
 package emildobrev.ecommerce.store.product;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,6 +19,7 @@ public class Comment {
 
     @NotBlank
     @Transient
+    @JsonIgnore
     @JsonAlias("id")
     String productId;
     private String createdBy;

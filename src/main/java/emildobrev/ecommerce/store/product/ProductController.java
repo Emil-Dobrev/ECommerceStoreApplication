@@ -4,6 +4,7 @@ import emildobrev.ecommerce.store.enums.Category;
 import emildobrev.ecommerce.store.product.dto.CartResponse;
 import emildobrev.ecommerce.store.product.dto.ProductDTO;
 import emildobrev.ecommerce.store.product.dto.RatingDTO;
+import emildobrev.ecommerce.store.product.dto.SearchByCategoryDto;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -47,7 +48,7 @@ public class ProductController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
-    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
+    public ResponseEntity<Product> createProduct(@RequestBody ProductDTO product) {
         Product createdProduct = productService.createProduct(product);
         return ResponseEntity.ok(createdProduct);
     }
@@ -71,9 +72,8 @@ public class ProductController {
     }
 
     @GetMapping("/category")
-    public ResponseEntity<List<ProductDTO>> getAllProductsByCategory(@RequestBody ProductDTO productDTO) {
-        Category category = productDTO.getCategory();
-        List<ProductDTO> products = productService.getAllProductsByCategory(category);
+    public ResponseEntity<List<ProductDTO>> getAllProductsByCategory(@RequestBody SearchByCategoryDto category) {
+        List<ProductDTO> products = productService.getAllProductsByCategory(category.getCategory());
         return ResponseEntity.ok().body(products);
     }
 

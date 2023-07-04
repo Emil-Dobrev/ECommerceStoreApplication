@@ -57,8 +57,9 @@ public class ProductServiceImp implements ProductService {
         throw new NotFoundException(PRODUCT_NOT_FOUND_WITH_ID + id);
     }
 
-    public Product createProduct(Product product) {
+    public Product createProduct(ProductDTO productDTO) {
         try {
+            Product product = modelMapper.map(productDTO, Product.class);
             return productRepository.save(product);
         } catch (DataAccessException e) {
             throw new ProductCreationException("Failed to create product", e);
@@ -95,7 +96,7 @@ public class ProductServiceImp implements ProductService {
 
         var user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
-        if (product.getVotedUsers() != null && product.getVotedUsers().containsKey(email)) {
+        if (product.getVotedUsers() != null && product.getVotedUsers().containsKey(user.getId())) {
             throw new UserAlreadyVotedException("User already voted for product with id:" + id);
         }
         product.addVote(user.getId(), rating);

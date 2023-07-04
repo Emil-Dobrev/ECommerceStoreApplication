@@ -24,7 +24,7 @@ import static emildobrev.ecommerce.store.constants.Constants.ROLES;
 public class JwtService {
 
     private final JwtSecret jwtSecret;
-    private final int EXPIRATION_TIME_JWT= 1000 * 60 * 4;
+    private final int EXPIRATION_TIME_JWT= 10000 * 60 * 4;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);

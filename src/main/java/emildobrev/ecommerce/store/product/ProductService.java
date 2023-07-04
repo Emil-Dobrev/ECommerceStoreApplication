@@ -12,7 +12,7 @@ public interface ProductService {
 
     Page<ProductDTO> getAllProducts(Pageable pageable);
     ProductDTO getProductById(String id);
-    Product createProduct(Product product);
+    Product createProduct(ProductDTO product);
     ProductDTO updateProduct(ProductDTO productDTO);
     void deleteProduct(String id);
     List<ProductDTO> getAllProductsByCategory(Category category);
