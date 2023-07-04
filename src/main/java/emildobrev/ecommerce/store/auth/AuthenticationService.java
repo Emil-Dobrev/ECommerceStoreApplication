@@ -6,6 +6,7 @@ import emildobrev.ecommerce.store.auth.dto.RegisterRequest;
 import emildobrev.ecommerce.store.config.JwtService;
 import emildobrev.ecommerce.store.exception.EmailAlreadyTakenException;
 import emildobrev.ecommerce.store.user.Role;
+
 import emildobrev.ecommerce.store.user.User;
 import emildobrev.ecommerce.store.user.UserRepository;
 import lombok.RequiredArgsConstructor;

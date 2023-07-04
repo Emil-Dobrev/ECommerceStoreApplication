@@ -46,28 +46,23 @@ public class CouponJob {
         log.info("Generate loyalty coupons job started");
         LocalDate oneMonthAgo = LocalDate.now().minusMonths(1);
         Instant oneMonthAgoInstant = oneMonthAgo.atStartOfDay(ZoneOffset.UTC).toInstant();
-        var orders = orderRepository.findByIsCanceledFalse();
-        //Checking how much orders we have per user
-        var userIdCounts = orders.stream()
-                .filter(order -> order.getOrderDate().isAfter(oneMonthAgoInstant))
-                .collect(Collectors.groupingBy(Order::getUserId, Collectors.counting()));
+        List<Order> orders = orderRepository.findByIsCanceledFalse();
 
-        //Generating coupon for users which have made 2 orders for past month
-        List<String> repeatingUserIds = userIdCounts.entrySet().stream()
-                .filter(entry -> entry.getValue() > 1)
-                .map(Map.Entry::getKey)
-                .toList();
+            //Checking how much orders we have per user
+            var userIdCounts = orders.stream()
+                    .filter(order -> order.getOrderDate().isAfter(oneMonthAgoInstant))
+                    .collect(Collectors.groupingBy(Order::getUserId, Collectors.counting()));
+
+            //Generating coupon for users which have made 2 orders for past month
+            List<String> repeatingUserIds = userIdCounts.entrySet().stream()
+                    .filter(entry -> entry.getValue() > 1)
+                    .map(Map.Entry::getKey)
+                    .toList();
 
         repeatingUserIds.forEach(userId -> {
             var user = userRepository.findById(userId);
 
             if (user.isPresent()) {
-//                Coupon coupon = Coupon.builder()
-//                        .code(CouponsType.LOYALTY)
-//                        .discount((double) generateRandomDiscount())
-//                        .validFrom(Instant.now())
-//                        .validTo(Instant.now().plus(14, ChronoUnit.DAYS))
-//                        .build();
                 Coupon coupon = CouponFactory.createCoupon(
                         DiscountType.PERCENTAGE,
                         CouponsType.LOYALTY,
@@ -160,5 +155,4 @@ public class CouponJob {
                         coupon.getDiscount()))
                 .build();
     }
-
 }

@@ -26,6 +26,6 @@ public class Coupon {
     @NonNull
     private Instant validTo;
     @NonNull
-    DiscountType discountType;
+    private DiscountType discountType;
     private boolean isUsed = false;
 }

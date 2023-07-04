@@ -20,7 +20,6 @@ public class CouponFactory {
         }
     }
 
-
     private static Coupon createPercentageCoupon(CouponsType type, Double discount, Instant validFrom, Instant validTo) {
         return Coupon.builder()
                 .discountType(DiscountType.PERCENTAGE)

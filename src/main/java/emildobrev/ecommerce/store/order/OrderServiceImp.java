@@ -3,6 +3,7 @@ package emildobrev.ecommerce.store.order;
 import emildobrev.ecommerce.store.coupons.Coupon;
 import emildobrev.ecommerce.store.coupons.CouponRepository;
 import emildobrev.ecommerce.store.email.EmailService;
+import emildobrev.ecommerce.store.enums.DiscountType;
 import emildobrev.ecommerce.store.exception.AccessDeniedException;
 import emildobrev.ecommerce.store.exception.EmptyCartException;
 import emildobrev.ecommerce.store.exception.NotFoundException;
@@ -128,7 +129,10 @@ public class OrderServiceImp implements OrderService {
     private void useCouponDiscount(String couponId, User user, BigDecimal totalAmount, Order.OrderBuilder orderBuilder, Coupon coupon) {
         //check if User contains this coupon and if now is after validFrom and now is before validTo
         if (Utils.isValidCoupon(user, coupon)) {
-            BigDecimal discountAmount = getDiscountAmount(totalAmount, coupon);
+            BigDecimal discountAmount = getDiscountAmount(
+                    coupon.getDiscountType(),
+                    totalAmount,
+                    BigDecimal.valueOf(coupon.getDiscount()));
             totalAmount = totalAmount.subtract(discountAmount);
 
             orderBuilder.totalAmount(totalAmount.setScale(2, RoundingMode.UP))
@@ -141,8 +145,18 @@ public class OrderServiceImp implements OrderService {
         }
     }
 
-    private BigDecimal getDiscountAmount(BigDecimal totalAmount, Coupon coupon) {
-        double discountPercentage = coupon.getDiscount();
-        return totalAmount.multiply(BigDecimal.valueOf(discountPercentage / 100.0));
+    private BigDecimal getDiscountAmount(DiscountType discountType, BigDecimal originalPrice, BigDecimal discount) {
+        switch (discountType) {
+            case PERCENTAGE -> {
+                return originalPrice.multiply(discount)
+                        .divide(new BigDecimal(100), 2, RoundingMode.HALF_UP);
+            }
+            case FIXED_AMOUNT -> {
+                return originalPrice.subtract(discount);
+            }
+            default -> {
+                throw new IllegalArgumentException("Invalid coupon type: " + discountType);
+            }
+        }
     }
 }
