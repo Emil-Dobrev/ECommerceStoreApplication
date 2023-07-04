@@ -22,10 +22,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static emildobrev.ecommerce.store.constants.Constants.USER_NOT_FOUND;
 
@@ -149,12 +146,21 @@ public class ProductServiceImp implements ProductService {
                 .orElseThrow(() -> new NotFoundException(PRODUCT_NOT_FOUND_WITH_ID + id));
 
         HashSet<ProductCartDTO> userCart = user.getCart();
-        userCart.remove(modelMapper.map(product, ProductCartDTO.class));
-        userRepository.save(modelMapper.map(user, User.class));
-        return CartResponse.builder()
-                .cart(userCart)
-                .message("Successfully removed")
-                .build();
+        boolean removed = userCart.removeIf(e -> Objects.equals(e.getId(), id)); // Remove the object with the same ID
+
+
+        if (removed) {
+            userRepository.save(modelMapper.map(user, User.class));
+            return CartResponse.builder()
+                    .cart(userCart)
+                    .message("Successfully removed")
+                    .build();
+        } else {
+            return CartResponse.builder()
+                    .cart(userCart)
+                    .message("No matching product found")
+                    .build();
+        }
     }
 
     private double calculateAverageRating(HashMap<String, Double> votedUsers) {
