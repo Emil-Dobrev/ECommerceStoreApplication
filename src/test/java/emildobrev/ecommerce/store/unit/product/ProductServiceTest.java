@@ -17,7 +17,7 @@ import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 
-public class ProductServiceTest {
+ class ProductServiceTest {
 
     @Mock
     private ProductRepository productRepository;
@@ -36,7 +36,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void testUpdateProduct() {
+    void testUpdateProduct() {
         // Mock data
         ProductDTO productDTO = ProductDTO.builder()
                 .id("1")
@@ -82,7 +82,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void voteProduct_WithValidData_ShouldSaveProductWithUpdatedRating() {
+     void voteProduct_WithValidData_ShouldSaveProductWithUpdatedRating() {
         // Arrange
         String productId = "123";
         String userEmail = "test@example.com";

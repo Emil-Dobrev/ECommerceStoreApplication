@@ -2,10 +2,7 @@ package emildobrev.ecommerce.store.user;
 
 import emildobrev.ecommerce.store.coupons.Coupon;
 import emildobrev.ecommerce.store.product.dto.ProductCartDTO;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NonNull;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
