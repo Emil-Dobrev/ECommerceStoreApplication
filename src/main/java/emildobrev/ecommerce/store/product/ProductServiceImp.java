@@ -188,6 +188,8 @@ public class ProductServiceImp implements ProductService {
         HashSet<ProductCartDTO> userWishList = user.getWishList();
         boolean removed = userWishList.removeIf(e -> Objects.equals(e.getId(), id));
 
+        if(removed) userRepository.save(user);
+
         return WishListResponse.builder()
                 .productName(product.getName())
                 .message(removed ? "Successfully removed" : "No matching product found")
