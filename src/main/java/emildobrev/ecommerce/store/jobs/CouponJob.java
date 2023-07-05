@@ -6,7 +6,7 @@ import emildobrev.ecommerce.store.coupons.CouponRepository;
 import emildobrev.ecommerce.store.email.EmailService;
 import emildobrev.ecommerce.store.enums.CouponsType;
 import emildobrev.ecommerce.store.enums.DiscountType;
-import emildobrev.ecommerce.store.order.EmailMetaInformation;
+import emildobrev.ecommerce.store.email.EmailMetaInformation;
 import emildobrev.ecommerce.store.order.Order;
 import emildobrev.ecommerce.store.order.OrderRepository;
 import emildobrev.ecommerce.store.user.User;
@@ -40,7 +40,8 @@ public class CouponJob {
     private final CouponRepository couponRepository;
     private final EmailService emailService;
 
-    @Scheduled(cron = "@monthly")
+//    @Scheduled(cron = "@monthly")
+    @Scheduled(cron = "0 * * * * *")
     @Transactional
     public void generateLoyalCoupons() {
         log.info("Generate loyalty coupons job started");
@@ -76,7 +77,13 @@ public class CouponJob {
                 userCoupons.add(coupon);
                 user.get().setCoupons(userCoupons);
                 userRepository.save(user.get());
-                emailService.sendEmail(generateEmailMetaInformation(user.get(), coupon, SUBJECT_COUPON, EMAIL_TEXT_COUPON));
+                emailService.sendEmail(generateEmailMetaInformation(
+                        user.get(),
+                        coupon,
+                        SUBJECT_COUPON, EMAIL_TEXT_COUPON
+                        ),
+                        coupon
+                );
             }
         });
     }
@@ -118,7 +125,8 @@ public class CouponJob {
                     user,
                     birtdayCoupon,
                     SUBJECT_COUPON_BIRTHDAY,
-                    EMAIL_TEXT_COUPON_BIRTHDAY));
+                    EMAIL_TEXT_COUPON_BIRTHDAY
+            ), birtdayCoupon );
         }));
     }
 

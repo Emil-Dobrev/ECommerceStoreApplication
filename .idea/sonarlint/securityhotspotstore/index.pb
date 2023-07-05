@@ -77,14 +77,8 @@ Asrc/main/java/emildobrev/Ecommerce/Store/user/UserRepository.java,9/7/97ee29c9
 Lsrc/test/java/emildobrev/Ecommerce/Store/ECommerceStoreApplicationTests.java,3/d/3d19785a74835eb86ca42c289283e024a998ead4
 x
 Hsrc/main/java/emildobrev/ecommerce/store/order/OrderNumberGenerator.java,8/9/894824cd149cdb694b8a5e213dad16031e3763be
-x
-Hsrc/main/java/emildobrev/ecommerce/store/order/EmailMetaInformation.java,9/e/9ee54df46ea036fc105fcf357807da6c600c664f
-s
-Csrc/main/java/emildobrev/ecommerce/store/email/EmailServiceImp.java,e/c/ec3c1e3a0bf66c1e51de6afbf410bdd23b659f87
 7
 pom.xml,4/4/442292b8a7efeabbe4cc176709b833b1792140ec
-p
-@src/main/java/emildobrev/ecommerce/store/email/EmailService.java,7/1/71ce2b400b9be18c844059063267cb513fd9c812
 |
 Lsrc/main/java/emildobrev/ecommerce/store/auth/dto/AuthenticationRequest.java,2/1/211c5825ee7828a907d002efdc04b30bda816d37
 }
@@ -107,10 +101,6 @@ n
 >src/main/java/emildobrev/ecommerce/store/config/AppConfig.java,6/c/6cffbfcf47e806f8885e90620d9e2e8b60f8233f
 r
 Bsrc/main/java/emildobrev/ecommerce/store/docker/docker-compose.yml,7/6/769dfadf33068803fc40b908d4babaa0885aeb2c
-i
-9src/main/java/emildobrev/ecommerce/store/order/Order.java,3/7/3789cd69311ce755e45e42f206d4a831b83f08ab
-s
-Csrc/main/java/emildobrev/ecommerce/store/order/OrderServiceImp.java,8/3/8366176707a36e4978d8b2de77e7208050ca0f25
 |
 Lsrc/test/java/emildobrev/ecommerce/store/ECommerceStoreApplicationTests.java,6/5/653a9071366f894e9a65cd6634cd5b6fac9693e0
 o

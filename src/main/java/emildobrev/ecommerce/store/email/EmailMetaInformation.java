@@ -1,4 +1,4 @@
-package emildobrev.ecommerce.store.order;
+package emildobrev.ecommerce.store.email;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,7 +8,7 @@ import lombok.NonNull;
 @AllArgsConstructor
 @Data
 @Builder
-public class EmailMetaInformation {
+public class EmailMetaInformation<T> {
     @NonNull
     private String fullName;
     @NonNull
