@@ -8,7 +8,7 @@ import lombok.NonNull;
 @AllArgsConstructor
 @Data
 @Builder
-public class EmailMetaInformation<T> {
+public class EmailMetaInformation {
     @NonNull
     private String fullName;
     @NonNull
