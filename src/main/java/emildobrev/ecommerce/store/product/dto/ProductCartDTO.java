@@ -1,5 +1,6 @@
 package emildobrev.ecommerce.store.product.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import emildobrev.ecommerce.store.enums.Category;
 import lombok.*;
 
@@ -10,6 +11,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Builder
 public class ProductCartDTO {
+    @JsonIgnore
     private String id;
     @NonNull
     private String name;

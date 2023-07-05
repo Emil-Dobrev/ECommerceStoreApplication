@@ -1,5 +1,6 @@
 package emildobrev.ecommerce.store.order;
 
+import emildobrev.ecommerce.store.order.dto.CreateOrderResponse;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
@@ -14,8 +15,8 @@ public class OrderController {
 
     private final OrderService orderService;
     @PostMapping
-    public ResponseEntity<Order> createOrder(Authentication authentication,
-                                            @RequestParam(name = "couponId", required = false) String couponId
+    public ResponseEntity<CreateOrderResponse> createOrder(Authentication authentication,
+                                                           @RequestParam(name = "couponId", required = false) String couponId
     ) {
       return ResponseEntity.ok().body(orderService.createOrder(authentication.getName(), couponId));
     }

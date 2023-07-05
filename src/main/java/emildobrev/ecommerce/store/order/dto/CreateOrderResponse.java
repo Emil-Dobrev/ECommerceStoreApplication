@@ -1,26 +1,24 @@
-package emildobrev.ecommerce.store.order;
+package emildobrev.ecommerce.store.order.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import emildobrev.ecommerce.store.product.dto.ProductCartDTO;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NonNull;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.HashSet;
 
-@Document(collection = "orders")
-@NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Data
-public class Order {
-    @Id
-    @JsonIgnore
-    private String id;
+@Builder
+public class CreateOrderResponse {
+
     @NonNull
-    private String userId;
+    private String userFullName;
     @NonNull
     private BigDecimal totalAmount;
     @NonNull
@@ -29,8 +27,7 @@ public class Order {
     private HashSet<ProductCartDTO> products;
     private String couponId;
     private BigDecimal totalDiscount;
-    private boolean isCanceled = false;
+    @NonNull
     private String orderNumber;
-    @JsonIgnore
-    private boolean isEmailSend = true;
+
 }

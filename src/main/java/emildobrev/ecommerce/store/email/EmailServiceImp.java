@@ -37,6 +37,7 @@ public class EmailServiceImp implements EmailService {
     @Async
     public <T> void sendEmail(@NonNull EmailMetaInformation emailMetaInformation, T object ) {
         try {
+
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
             mimeMessage.setFrom(new InternetAddress(SENDER_EMAIL));

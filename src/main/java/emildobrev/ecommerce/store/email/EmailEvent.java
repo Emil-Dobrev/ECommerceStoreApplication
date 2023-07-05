@@ -4,8 +4,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Value;
 import org.springframework.context.ApplicationEvent;
 
-
-
 @Value
 @EqualsAndHashCode(callSuper = true)
 public class EmailEvent<T> extends ApplicationEvent {

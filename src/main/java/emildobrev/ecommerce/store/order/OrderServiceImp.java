@@ -8,11 +8,13 @@ import emildobrev.ecommerce.store.enums.DiscountType;
 import emildobrev.ecommerce.store.exception.AccessDeniedException;
 import emildobrev.ecommerce.store.exception.EmptyCartException;
 import emildobrev.ecommerce.store.exception.NotFoundException;
+import emildobrev.ecommerce.store.order.dto.CreateOrderResponse;
 import emildobrev.ecommerce.store.product.dto.ProductCartDTO;
 import emildobrev.ecommerce.store.user.Role;
 import emildobrev.ecommerce.store.user.User;
 import emildobrev.ecommerce.store.user.UserRepository;
 import emildobrev.ecommerce.store.util.Utils;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.modelmapper.ModelMapper;
@@ -41,7 +43,7 @@ public class OrderServiceImp implements OrderService {
 
     @Override
     @Transactional
-    public Order createOrder(@NotNull String email, String couponId) {
+    public CreateOrderResponse createOrder(@NotNull String email, String couponId) {
         var user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("User not found with ID: " + email));
 
@@ -72,7 +74,15 @@ public class OrderServiceImp implements OrderService {
 
         Order order = orderRepository.save(orderBuilder.build());
         emailService.sendEmail(generateEmailMetaInformation(user, order), order);
-        return order;
+        return CreateOrderResponse.builder()
+                .totalDiscount(order.getTotalDiscount())
+                .userFullName(Utils.getFullName(user))
+                .orderNumber(order.getOrderNumber())
+                .totalAmount(order.getTotalAmount())
+                .orderDate(order.getOrderDate())
+                .couponId(couponId)
+                .products(cart)
+                .build();
     }
 
 
