@@ -2,6 +2,7 @@ package emildobrev.ecommerce.store.order;
 
 import emildobrev.ecommerce.store.coupons.Coupon;
 import emildobrev.ecommerce.store.coupons.CouponRepository;
+import emildobrev.ecommerce.store.email.EmailMetaInformation;
 import emildobrev.ecommerce.store.email.EmailService;
 import emildobrev.ecommerce.store.enums.DiscountType;
 import emildobrev.ecommerce.store.exception.AccessDeniedException;
@@ -70,7 +71,7 @@ public class OrderServiceImp implements OrderService {
         userRepository.save(modelMapper.map(user, User.class));
 
         Order order = orderRepository.save(orderBuilder.build());
-        emailService.sendEmail(generateEmailMetaInformation(user, order));
+        emailService.sendEmail(generateEmailMetaInformation(user, order), order);
         return order;
     }
 

@@ -1,6 +1,5 @@
 package emildobrev.ecommerce.store.email;
 
-import emildobrev.ecommerce.store.order.EmailMetaInformation;
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
@@ -8,6 +7,7 @@ import jakarta.mail.internet.MimeMessage;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -30,11 +30,12 @@ public class EmailServiceImp implements EmailService {
     private final String SENDER_EMAIL = "dobrev93sl@gmail.com";
     private static final String STATIC_EMAIL_TEMPLATE_HTML = "static/EmailTemplate.html";
     private final JavaMailSender javaMailSender;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
 
     @Override
     @Async
-    public void sendEmail(@NonNull EmailMetaInformation emailMetaInformation) {
+    public <T> void sendEmail(@NonNull EmailMetaInformation emailMetaInformation, T object ) {
         try {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
@@ -45,6 +46,7 @@ public class EmailServiceImp implements EmailService {
             javaMailSender.send(mimeMessage);
         } catch (MessagingException | RuntimeException | IOException e) {
             log.error("Failed to send email: {}" + e.getMessage());
+            applicationEventPublisher.publishEvent(new EmailEvent<>(this, object));
         }
     }
 

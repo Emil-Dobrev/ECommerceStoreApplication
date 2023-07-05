@@ -1,4 +1,4 @@
-package emildobrev.ecommerce.store.order;
+package emildobrev.ecommerce.store.email;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

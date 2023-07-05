@@ -29,4 +29,5 @@ public class Order {
     private BigDecimal totalDiscount;
     private boolean isCanceled = false;
     private String orderNumber;
+    private boolean isEmailSend = true;
 }
