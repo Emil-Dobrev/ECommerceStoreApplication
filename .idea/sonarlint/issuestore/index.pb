@@ -77,8 +77,6 @@ Asrc/main/java/emildobrev/Ecommerce/Store/user/UserRepository.java,9/7/97ee29c9
 Lsrc/test/java/emildobrev/Ecommerce/Store/ECommerceStoreApplicationTests.java,3/d/3d19785a74835eb86ca42c289283e024a998ead4
 7
 pom.xml,4/4/442292b8a7efeabbe4cc176709b833b1792140ec
-{
-Ksrc/main/java/emildobrev/ecommerce/store/auth/AuthenticationController.java,c/b/cb00f0b0fe392683f1cbdf55ab4f79d48aed5d58
 }
 Msrc/main/java/emildobrev/ecommerce/store/auth/dto/AuthenticationResponse.java,b/f/bfc8e7ed3f78366aa68f7bac2c41cbba65cbacf8
 v

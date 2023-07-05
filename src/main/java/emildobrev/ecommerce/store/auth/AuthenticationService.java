@@ -39,6 +39,7 @@ public class AuthenticationService {
                 .roles(List.of(Role.USER))
                 .cart(new HashSet<>())
                 .coupons(new HashSet<>())
+                .wishList(new HashSet<>())
                 .build();
 
        try{

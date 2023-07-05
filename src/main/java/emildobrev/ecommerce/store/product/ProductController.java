@@ -1,11 +1,8 @@
 package emildobrev.ecommerce.store.product;
 
-import emildobrev.ecommerce.store.enums.Category;
-import emildobrev.ecommerce.store.product.dto.CartResponse;
-import emildobrev.ecommerce.store.product.dto.ProductDTO;
-import emildobrev.ecommerce.store.product.dto.RatingDTO;
-import emildobrev.ecommerce.store.product.dto.SearchByCategoryDto;
+import emildobrev.ecommerce.store.product.dto.*;
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -87,7 +84,7 @@ public class ProductController {
         return ResponseEntity.ok(productService.getAllByNameRegex(regex));
     }
 
-    @PutMapping("/cart/add/{id}")
+    @PostMapping("/cart/add/{id}")
     public ResponseEntity<CartResponse> addProductToCart(@PathVariable String id,
                                                          @RequestParam("quantity") int quantity,
                                                          Authentication authentication) {
@@ -96,6 +93,19 @@ public class ProductController {
 
     @PutMapping("/cart/remove/{id}")
     public ResponseEntity<CartResponse> removeProductFromCart(@PathVariable String id, Authentication authentication) {
-        return ResponseEntity.ok().body(  productService.removeProductFromCart(id, authentication.getName()));
+        return ResponseEntity.ok().body(productService.removeProductFromCart(id, authentication.getName()));
     }
+
+    @PostMapping("/wishlist/add/{id}")
+    public ResponseEntity<WishListResponse> addProductToWishList(@PathVariable @NonNull String id,
+                                                                 Authentication authentication) {
+        return ResponseEntity.ok().body(productService.addproducttowishlist(id, authentication.getName()));
+    }
+
+    @PutMapping("/wishlist/remove/{id}")
+    public ResponseEntity<WishListResponse> removeProductFromWishlist(@PathVariable @NonNull String id,
+                                                                      Authentication authentication) {
+        return ResponseEntity.ok().body(productService.removeProductFromWishlist(id, authentication.getName()));
+    }
+
 }

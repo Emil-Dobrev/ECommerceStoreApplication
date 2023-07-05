@@ -71,9 +71,9 @@ public class OrderServiceImp implements OrderService {
         }
         user.setCart(new HashSet<>());
         userRepository.save(modelMapper.map(user, User.class));
-
         Order order = orderRepository.save(orderBuilder.build());
         emailService.sendEmail(generateEmailMetaInformation(user, order), order);
+
         return CreateOrderResponse.builder()
                 .totalDiscount(order.getTotalDiscount())
                 .userFullName(Utils.getFullName(user))
@@ -84,7 +84,6 @@ public class OrderServiceImp implements OrderService {
                 .products(cart)
                 .build();
     }
-
 
     @Override
     public void cancelOrder(String email, String orderId) {
@@ -165,9 +164,7 @@ public class OrderServiceImp implements OrderService {
             case FIXED_AMOUNT -> {
                 return originalPrice.subtract(discount);
             }
-            default -> {
-                throw new IllegalArgumentException("Invalid coupon type: " + discountType);
-            }
+            default -> throw new IllegalArgumentException("Invalid coupon type: " + discountType);
         }
     }
 }

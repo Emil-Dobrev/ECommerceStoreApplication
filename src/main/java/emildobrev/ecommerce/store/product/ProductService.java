@@ -3,6 +3,7 @@ package emildobrev.ecommerce.store.product;
 import emildobrev.ecommerce.store.enums.Category;
 import emildobrev.ecommerce.store.product.dto.CartResponse;
 import emildobrev.ecommerce.store.product.dto.ProductDTO;
+import emildobrev.ecommerce.store.product.dto.WishListResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -21,4 +22,6 @@ public interface ProductService {
     List<ProductDTO> getAllByNameRegex(String regex);
     CartResponse addProductToCart(String productId,int quantity, String email);
     CartResponse removeProductFromCart(String id, String email);
+    WishListResponse addproducttowishlist(String id, String email);
+    WishListResponse removeProductFromWishlist(String id, String email);
 }

@@ -8,6 +8,7 @@ import emildobrev.ecommerce.store.exception.UserAlreadyVotedException;
 import emildobrev.ecommerce.store.product.dto.CartResponse;
 import emildobrev.ecommerce.store.product.dto.ProductCartDTO;
 import emildobrev.ecommerce.store.product.dto.ProductDTO;
+import emildobrev.ecommerce.store.product.dto.WishListResponse;
 import emildobrev.ecommerce.store.user.User;
 import emildobrev.ecommerce.store.user.UserRepository;
 import lombok.AllArgsConstructor;
@@ -142,8 +143,6 @@ public class ProductServiceImp implements ProductService {
 
     public CartResponse removeProductFromCart(String id, String email) {
         var user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(PRODUCT_NOT_FOUND_WITH_ID + id));
 
         HashSet<ProductCartDTO> userCart = user.getCart();
         boolean removed = userCart.removeIf(e -> Objects.equals(e.getId(), id)); // Remove the object with the same ID
@@ -151,16 +150,48 @@ public class ProductServiceImp implements ProductService {
 
         if (removed) {
             userRepository.save(modelMapper.map(user, User.class));
-            return CartResponse.builder()
-                    .cart(userCart)
-                    .message("Successfully removed")
-                    .build();
-        } else {
-            return CartResponse.builder()
-                    .cart(userCart)
-                    .message("No matching product found")
-                    .build();
         }
+        return CartResponse.builder()
+                .cart(userCart)
+                .message(removed ? "Successfully removed" : "No matching product found")
+                .build();
+    }
+
+    @Override
+    public WishListResponse addproducttowishlist(String id, String email) {
+        var user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(PRODUCT_NOT_FOUND_WITH_ID + id));
+        var cartDto = modelMapper.map(product, ProductCartDTO.class);
+        var wishList = user.getWishList();
+
+        if (wishList == null) {
+            wishList = new HashSet<>();
+        }
+
+        wishList.add(cartDto);
+        user.setWishList(wishList);
+        userRepository.save(user);
+
+        return WishListResponse.builder()
+                .productName(product.getName())
+                .message("Successfully added product to wishlist")
+                .build();
+    }
+
+    @Override
+    public WishListResponse removeProductFromWishlist(String id, String email) {
+        var user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(PRODUCT_NOT_FOUND_WITH_ID + id));
+
+        HashSet<ProductCartDTO> userWishList = user.getWishList();
+        boolean removed = userWishList.removeIf(e -> Objects.equals(e.getId(), id));
+
+        return WishListResponse.builder()
+                .productName(product.getName())
+                .message(removed ? "Successfully removed" : "No matching product found")
+                .build();
     }
 
     private double calculateAverageRating(HashMap<String, Double> votedUsers) {

@@ -50,7 +50,6 @@ public class EmailServiceImp implements EmailService {
         }
     }
 
-
     private String buildEmail(EmailMetaInformation emailMetaInformation) throws IOException {
         return StreamUtils.copyToString(new ClassPathResource(STATIC_EMAIL_TEMPLATE_HTML).getInputStream(), StandardCharsets.UTF_8)
                 .replace(PLACEHOLDER_TITLE, emailMetaInformation.getTitle())

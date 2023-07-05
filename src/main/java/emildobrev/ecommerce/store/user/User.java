@@ -42,6 +42,7 @@ public class User implements UserDetails {
     @DateTimeFormat
     private Date birthdate;
     private HashSet<Coupon> coupons;
+    private HashSet<ProductCartDTO> wishList;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

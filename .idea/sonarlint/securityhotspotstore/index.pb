@@ -81,8 +81,6 @@ Lsrc/test/java/emildobrev/Ecommerce/Store/ECommerceStoreApplicationTests.java,3
 Lsrc/main/java/emildobrev/ecommerce/store/auth/dto/AuthenticationRequest.java,2/1/211c5825ee7828a907d002efdc04b30bda816d37
 }
 Msrc/main/java/emildobrev/ecommerce/store/auth/dto/AuthenticationResponse.java,b/f/bfc8e7ed3f78366aa68f7bac2c41cbba65cbacf8
-{
-Ksrc/main/java/emildobrev/ecommerce/store/auth/AuthenticationController.java,c/b/cb00f0b0fe392683f1cbdf55ab4f79d48aed5d58
 v
 Fsrc/main/java/emildobrev/ecommerce/store/auth/dto/RegisterRequest.java,6/3/635637928796920d25134fcf04ed76fa388a4b7f
 }
