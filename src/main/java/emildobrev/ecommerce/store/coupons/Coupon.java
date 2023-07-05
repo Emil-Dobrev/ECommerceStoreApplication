@@ -28,4 +28,5 @@ public class Coupon {
     @NonNull
     private DiscountType discountType;
     private boolean isUsed = false;
+    private boolean isEmailSend = true;
 }

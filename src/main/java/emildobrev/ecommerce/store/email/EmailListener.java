@@ -1,6 +1,7 @@
 package emildobrev.ecommerce.store.email;
 
 import emildobrev.ecommerce.store.coupons.Coupon;
+import emildobrev.ecommerce.store.coupons.CouponRepository;
 import emildobrev.ecommerce.store.order.Order;
 import emildobrev.ecommerce.store.order.OrderRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,19 +11,19 @@ import org.springframework.context.event.EventListener;
 @RequiredArgsConstructor
 public class EmailListener {
     private final OrderRepository orderRepository;
-
+    private final CouponRepository couponRepository;
 
     @EventListener
     public void emailFailed(EmailEvent emailEvent) {
     log.info("Failed to send email");
-     Object object = emailEvent.getValue();
-     if(object instanceof Order) {
-         ((Order) object).setEmailSend(false);
-         orderRepository.save((Order) object);
-     }
-     if(object instanceof Coupon) {
-         log.error("FAIL TO SEND EMAIL");
-     }
 
+     if(emailEvent.getValue() instanceof Order order) {
+         order.setEmailSend(false);
+         orderRepository.save(order);
+     }
+     if(emailEvent.getValue() instanceof Coupon coupon) {
+         coupon.setEmailSend(false);
+         couponRepository.save(coupon);
+     }
  }
 }

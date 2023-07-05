@@ -3,7 +3,7 @@ package emildobrev.ecommerce.store.email;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
 import org.springframework.context.ApplicationEvent;
-import org.springframework.data.annotation.Transient;
+
 
 @Value
 @EqualsAndHashCode(callSuper = true)

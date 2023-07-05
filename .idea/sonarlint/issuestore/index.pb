@@ -75,8 +75,6 @@ q
 Asrc/main/java/emildobrev/Ecommerce/Store/user/UserRepository.java,9/7/97ee29c9f4312221a79ea0ef2eaee54ddb1d4e43
 |
 Lsrc/test/java/emildobrev/Ecommerce/Store/ECommerceStoreApplicationTests.java,3/d/3d19785a74835eb86ca42c289283e024a998ead4
-x
-Hsrc/main/java/emildobrev/ecommerce/store/order/OrderNumberGenerator.java,8/9/894824cd149cdb694b8a5e213dad16031e3763be
 7
 pom.xml,4/4/442292b8a7efeabbe4cc176709b833b1792140ec
 {
