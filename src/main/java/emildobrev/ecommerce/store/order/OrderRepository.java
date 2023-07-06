@@ -1,7 +1,6 @@
 package emildobrev.ecommerce.store.order;
 
 import emildobrev.ecommerce.store.enums.OrderStatus;
-import emildobrev.ecommerce.store.order.dto.OrderForUserResponse;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
