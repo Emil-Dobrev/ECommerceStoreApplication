@@ -19,6 +19,10 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,6 +45,7 @@ public class OrderServiceImp implements OrderService {
     private final CouponRepository couponRepository;
     private final EmailService emailService;
     private final ModelMapper modelMapper;
+    private final MongoOperations mongoOperations;
 
     @Override
     @Transactional
@@ -100,6 +105,14 @@ public class OrderServiceImp implements OrderService {
         }
         order.setOrderStatus(OrderStatus.CANCELLED);
         orderRepository.save(order);
+    }
+
+    @Override
+    public void changeStatusOfOrder(String orderId, OrderStatus orderStatus) {
+        Query query = new Query(Criteria.where("_id").is(orderId));
+        Update update = new Update().set("orderStatus", orderStatus);
+
+        mongoOperations.updateFirst(query, update, Order.class);
     }
 
     private BigDecimal calculateTotalAmount(HashSet<ProductCartDTO> productDTOS) {

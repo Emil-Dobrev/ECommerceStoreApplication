@@ -1,8 +1,6 @@
 package emildobrev.ecommerce.store.enums;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-
 
 public enum OrderStatus {
     @JsonProperty("Pending")

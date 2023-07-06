@@ -7,6 +7,7 @@ import emildobrev.ecommerce.store.email.EmailService;
 import emildobrev.ecommerce.store.enums.CouponsType;
 import emildobrev.ecommerce.store.enums.DiscountType;
 import emildobrev.ecommerce.store.email.EmailMetaInformation;
+import emildobrev.ecommerce.store.enums.OrderStatus;
 import emildobrev.ecommerce.store.order.Order;
 import emildobrev.ecommerce.store.order.OrderRepository;
 import emildobrev.ecommerce.store.user.User;
@@ -47,7 +48,9 @@ public class CouponJob {
         log.info("Generate loyalty coupons job started");
         LocalDate oneMonthAgo = LocalDate.now().minusMonths(1);
         Instant oneMonthAgoInstant = oneMonthAgo.atStartOfDay(ZoneOffset.UTC).toInstant();
-        List<Order> orders = orderRepository.findByIsCanceledFalse();
+
+        List<OrderStatus> excludedStatuses = List.of(OrderStatus.CANCELLED, OrderStatus.RETURNED, OrderStatus.REFUNDED);
+        List<Order> orders = orderRepository.findByOrderStatusNotIn(excludedStatuses);
 
             //Checking how much orders we have per user
             var userIdCounts = orders.stream()

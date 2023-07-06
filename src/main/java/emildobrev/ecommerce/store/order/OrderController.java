@@ -1,5 +1,6 @@
 package emildobrev.ecommerce.store.order;
 
+import emildobrev.ecommerce.store.enums.OrderStatus;
 import emildobrev.ecommerce.store.order.dto.CreateOrderResponse;
 import lombok.RequiredArgsConstructor;
 
@@ -14,17 +15,25 @@ import org.springframework.web.bind.annotation.*;
 public class OrderController {
 
     private final OrderService orderService;
+
     @PostMapping
     public ResponseEntity<CreateOrderResponse> createOrder(Authentication authentication,
                                                            @RequestParam(name = "couponId", required = false) String couponId
     ) {
-      return ResponseEntity.ok().body(orderService.createOrder(authentication.getName(), couponId));
+        return ResponseEntity.ok().body(orderService.createOrder(authentication.getName(), couponId));
     }
 
     @PatchMapping
     public ResponseEntity<HttpStatus> cancelOrder(Authentication authentication,
                                                   @RequestParam("orderId") String orderId) {
         orderService.cancelOrder(authentication.getName(), orderId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/status")
+    public ResponseEntity<HttpStatus> changeStatusOfOrder(@RequestParam("orderId") String orderId,
+                                                          @RequestParam("orderStatus") OrderStatus orderStatus) {
+        orderService.changeStatusOfOrder(orderId, orderStatus);
         return ResponseEntity.noContent().build();
     }
 }
