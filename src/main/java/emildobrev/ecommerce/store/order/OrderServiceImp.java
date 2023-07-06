@@ -5,6 +5,7 @@ import emildobrev.ecommerce.store.coupons.CouponRepository;
 import emildobrev.ecommerce.store.email.EmailMetaInformation;
 import emildobrev.ecommerce.store.email.EmailService;
 import emildobrev.ecommerce.store.enums.DiscountType;
+import emildobrev.ecommerce.store.enums.OrderStatus;
 import emildobrev.ecommerce.store.exception.AccessDeniedException;
 import emildobrev.ecommerce.store.exception.EmptyCartException;
 import emildobrev.ecommerce.store.exception.NotFoundException;
@@ -61,6 +62,7 @@ public class OrderServiceImp implements OrderService {
                 .orderDate(orderDate)
                 .totalAmount(totalAmount)
                 .products(cart)
+                .orderStatus(OrderStatus.PENDING)
                 .orderNumber(OrderNumberGenerator.generateOrderNumber());
 
         if (couponId != null) {
@@ -96,7 +98,7 @@ public class OrderServiceImp implements OrderService {
         if (!order.getUserId().equals(user.getId()) || user.getRoles().contains(Role.ADMIN)) {
             throw new AccessDeniedException("You don't have permissions to cancel this order");
         }
-        order.setCanceled(true);
+        order.setOrderStatus(OrderStatus.CANCELLED);
         orderRepository.save(order);
     }
 

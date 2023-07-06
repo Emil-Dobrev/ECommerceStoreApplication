@@ -1,6 +1,7 @@
 package emildobrev.ecommerce.store.order;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import emildobrev.ecommerce.store.enums.OrderStatus;
 import emildobrev.ecommerce.store.product.dto.ProductCartDTO;
 import lombok.*;
 import org.springframework.data.annotation.Id;
@@ -29,8 +30,8 @@ public class Order {
     private HashSet<ProductCartDTO> products;
     private String couponId;
     private BigDecimal totalDiscount;
-    private boolean isCanceled = false;
     private String orderNumber;
+    private OrderStatus orderStatus;
     @JsonIgnore
     private boolean isEmailSend = true;
 }
