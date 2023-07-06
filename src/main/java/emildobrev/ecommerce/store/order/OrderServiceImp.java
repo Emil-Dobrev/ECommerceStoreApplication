@@ -10,12 +10,12 @@ import emildobrev.ecommerce.store.exception.AccessDeniedException;
 import emildobrev.ecommerce.store.exception.EmptyCartException;
 import emildobrev.ecommerce.store.exception.NotFoundException;
 import emildobrev.ecommerce.store.order.dto.CreateOrderResponse;
+import emildobrev.ecommerce.store.order.dto.OrderForUserResponse;
 import emildobrev.ecommerce.store.product.dto.ProductCartDTO;
 import emildobrev.ecommerce.store.user.Role;
 import emildobrev.ecommerce.store.user.User;
 import emildobrev.ecommerce.store.user.UserRepository;
 import emildobrev.ecommerce.store.util.Utils;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.modelmapper.ModelMapper;
@@ -32,6 +32,8 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.HashSet;
+import java.util.List;
+import java.util.stream.IntStream;
 
 import static emildobrev.ecommerce.store.constants.Constants.*;
 
@@ -100,7 +102,7 @@ public class OrderServiceImp implements OrderService {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new NotFoundException("Order not found with ID: " + orderId));
 
-        if (!order.getUserId().equals(user.getId()) || user.getRoles().contains(Role.ADMIN)) {
+        if (!order.getUserId().equals(user.getId()) || !user.getRoles().contains(Role.ADMIN)) {
             throw new AccessDeniedException("You don't have permissions to cancel this order");
         }
         order.setOrderStatus(OrderStatus.CANCELLED);
@@ -113,6 +115,24 @@ public class OrderServiceImp implements OrderService {
         Update update = new Update().set("orderStatus", orderStatus);
 
         mongoOperations.updateFirst(query, update, Order.class);
+    }
+
+    @Override
+    public List<OrderForUserResponse> getAllOrdersForUser(String email) {
+        var user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException("User not found with ID: " + email));
+        var orderList =  orderRepository.findAllByUserId(user.getId());
+
+        return IntStream.range(0, orderList.size())
+                .mapToObj(index -> {
+                    Order order = orderList.get(index);
+                    return OrderForUserResponse.builder()
+                            .totalAmount(order.getTotalAmount())
+                            .orderDate(order.getOrderDate())
+                            .products(order.getProducts())
+                            .numberOfOrder(index + 1) // Set the numberOfOrder field
+                            .build();
+                }).toList();
     }
 
     private BigDecimal calculateTotalAmount(HashSet<ProductCartDTO> productDTOS) {
