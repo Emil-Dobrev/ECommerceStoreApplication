@@ -77,8 +77,6 @@ v
 Fsrc/main/java/emildobrev/ecommerce/store/auth/dto/RegisterRequest.java,6/3/635637928796920d25134fcf04ed76fa388a4b7f
 }
 Msrc/test/java/emildobrev/ecommerce/store/integration/jobs/CouponJobsTest.java,4/0/408fea8cec429439a8e9abbc5405c64820da4fbe
-n
->src/main/java/emildobrev/ecommerce/store/user/dto/UserDto.java,4/3/432de5a74f639068ff75c9d9e9b85d248c6a5549
 |
 Lsrc/main/java/emildobrev/ecommerce/store/auth/dto/AuthenticationRequest.java,2/1/211c5825ee7828a907d002efdc04b30bda816d37
 n
@@ -103,10 +101,6 @@ v
 Fsrc/main/java/emildobrev/ecommerce/store/coupons/CouponController.java,9/5/95dcab294c0e3a3046714bb467576c9ce0d71d23
 g
 7src/main/java/emildobrev/ecommerce/store/user/Role.java,5/f/5f7549863308e787a288a62ae18325d281c72a26
-n
->src/main/java/emildobrev/ecommerce/store/user/UserService.java,b/f/bf9143f316cf51e3ad7ee6f90eb97f409932215b
-v
-Fsrc/main/java/emildobrev/ecommerce/store/product/dto/CartResponse.java,f/9/f9bdfb4ae9a06d52952aa2b8b0714ac7a6fdb5fd
 o
 ?src/main/java/emildobrev/ecommerce/store/config/JwtService.java,0/f/0ff289217e25c377a26f2a390039a3c69d1d6d61
 }
@@ -127,8 +121,6 @@ m
 =src/main/java/emildobrev/ecommerce/store/product/Product.java,6/e/6e8aabd54b1062d693aab3d5f282bd9ee06613db
 s
 Csrc/main/java/emildobrev/ecommerce/store/product/dto/RatingDTO.java,5/a/5a30b3a49c0ecc8cdad501c51c87a4c0d33ad366
-x
-Hsrc/main/java/emildobrev/ecommerce/store/auth/AuthenticationService.java,2/c/2cfa7fbeefd0633e3b228e86184da332ba53dbef
 z
 Jsrc/main/java/emildobrev/ecommerce/store/product/dto/WishListResponse.java,3/3/33bbb06ab3c38ad2c5469ab488b1476b28d5d5f2
 ’
@@ -139,14 +131,10 @@ l
 <src/main/java/emildobrev/ecommerce/store/enums/Category.java,3/1/31119a08600e5bcf40e1729b5a3f3dda4ff3ed63
 x
 Hsrc/main/java/emildobrev/ecommerce/store/order/OrderNumberGenerator.java,8/9/894824cd149cdb694b8a5e213dad16031e3763be
-{
-Ksrc/main/java/emildobrev/ecommerce/store/auth/AuthenticationController.java,c/b/cb00f0b0fe392683f1cbdf55ab4f79d48aed5d58
 l
 <src/main/java/emildobrev/ecommerce/store/jobs/CouponJob.java,e/5/e56982086ad4551ff149530ad763e14d2bf5ff3f
 o
 ?src/main/java/emildobrev/ecommerce/store/enums/CouponsType.java,a/1/a171b7cb5f9c3a5fa25e40fe6bdcc89cd7701a54
-q
-Asrc/main/java/emildobrev/ecommerce/store/user/UserRepository.java,4/4/44e3e68168e379afd98a62ee8b7f141ff487caa2
 o
 ?src/main/java/emildobrev/ecommerce/store/enums/OrderStatus.java,7/f/7f6444d6cdedc9aebe43a7e84cfbb88495f4d7b9
 h

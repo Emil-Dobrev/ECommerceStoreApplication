@@ -23,7 +23,6 @@ public class UserDto {
     private String lastName;
     @NonNull
     private String email;
-
     @NonNull
     private String password;
     private HashSet<ProductCartDTO> cart;

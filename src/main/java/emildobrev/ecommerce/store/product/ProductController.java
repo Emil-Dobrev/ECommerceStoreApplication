@@ -1,7 +1,6 @@
 package emildobrev.ecommerce.store.product;
 
 import emildobrev.ecommerce.store.product.dto.*;
-import jakarta.annotation.security.PermitAll;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.cache.annotation.Cacheable;
@@ -11,7 +10,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 

@@ -79,8 +79,6 @@ v
 Fsrc/main/java/emildobrev/ecommerce/store/auth/dto/RegisterRequest.java,6/3/635637928796920d25134fcf04ed76fa388a4b7f
 }
 Msrc/test/java/emildobrev/ecommerce/store/integration/jobs/CouponJobsTest.java,4/0/408fea8cec429439a8e9abbc5405c64820da4fbe
-n
->src/main/java/emildobrev/ecommerce/store/user/dto/UserDto.java,4/3/432de5a74f639068ff75c9d9e9b85d248c6a5549
 q
 Asrc/main/java/emildobrev/ecommerce/store/constants/Constants.java,3/a/3afac09a8153cbaa9f98df0e20a35f35bd2db440
 n
@@ -101,12 +99,8 @@ s
 Csrc/main/java/emildobrev/ecommerce/store/coupons/CouponService.java,d/9/d9f5c112af90496db8f7a146f48e7a74163e422c
 v
 Fsrc/main/java/emildobrev/ecommerce/store/coupons/CouponRepository.java,2/1/21bf1f1baa86da3de6af625eced8c0ee8d662630
-n
->src/main/java/emildobrev/ecommerce/store/user/UserService.java,b/f/bf9143f316cf51e3ad7ee6f90eb97f409932215b
 g
 7src/main/java/emildobrev/ecommerce/store/user/Role.java,5/f/5f7549863308e787a288a62ae18325d281c72a26
-v
-Fsrc/main/java/emildobrev/ecommerce/store/product/dto/CartResponse.java,f/9/f9bdfb4ae9a06d52952aa2b8b0714ac7a6fdb5fd
 o
 ?src/main/java/emildobrev/ecommerce/store/config/JwtService.java,0/f/0ff289217e25c377a26f2a390039a3c69d1d6d61
 }
@@ -129,10 +123,6 @@ s
 Csrc/main/java/emildobrev/ecommerce/store/product/dto/RatingDTO.java,5/a/5a30b3a49c0ecc8cdad501c51c87a4c0d33ad366
 z
 Jsrc/main/java/emildobrev/ecommerce/store/product/dto/WishListResponse.java,3/3/33bbb06ab3c38ad2c5469ab488b1476b28d5d5f2
-{
-Ksrc/main/java/emildobrev/ecommerce/store/auth/AuthenticationController.java,c/b/cb00f0b0fe392683f1cbdf55ab4f79d48aed5d58
-x
-Hsrc/main/java/emildobrev/ecommerce/store/auth/AuthenticationService.java,2/c/2cfa7fbeefd0633e3b228e86184da332ba53dbef
 ’
 bsrc/test/java/emildobrev/ecommerce/store/integration/product/ProductControllerIntegrationTest.java,4/b/4b52c2863d8ae0e7e42388c8cf93bd7c2161c66e
 s
@@ -147,8 +137,6 @@ l
 <src/main/java/emildobrev/ecommerce/store/jobs/CouponJob.java,e/5/e56982086ad4551ff149530ad763e14d2bf5ff3f
 o
 ?src/main/java/emildobrev/ecommerce/store/enums/CouponsType.java,a/1/a171b7cb5f9c3a5fa25e40fe6bdcc89cd7701a54
-q
-Asrc/main/java/emildobrev/ecommerce/store/user/UserRepository.java,4/4/44e3e68168e379afd98a62ee8b7f141ff487caa2
 h
 8src/main/java/emildobrev/ecommerce/store/util/Utils.java,0/e/0e500b0a8e65947c5d8904b843175d53bd9b00ef
 {
