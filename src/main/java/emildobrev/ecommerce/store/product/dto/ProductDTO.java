@@ -5,6 +5,7 @@ import emildobrev.ecommerce.store.enums.Category;
 import emildobrev.ecommerce.store.product.Comment;
 import lombok.*;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -13,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ProductDTO {
+public class ProductDTO implements Serializable {
 
     private String id;
     @NonNull

@@ -3,6 +3,8 @@ package emildobrev.ecommerce.store.product;
 import emildobrev.ecommerce.store.product.dto.*;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +26,7 @@ public class ProductController {
     private ProductServiceImp productService;
 
     @GetMapping
+    @Cacheable(value = "products", key = "#page + '-' + #size")
     public ResponseEntity<Page<ProductDTO>> getAllProducts(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "25") int size

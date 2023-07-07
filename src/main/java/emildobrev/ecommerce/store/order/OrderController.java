@@ -5,6 +5,7 @@ import emildobrev.ecommerce.store.order.dto.CreateOrderResponse;
 import emildobrev.ecommerce.store.order.dto.OrderForUserResponse;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

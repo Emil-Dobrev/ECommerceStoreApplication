@@ -1,6 +1,7 @@
 package emildobrev.ecommerce.store.product;
 
 import emildobrev.ecommerce.store.enums.Category;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
