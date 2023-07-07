@@ -1,10 +1,10 @@
 package emildobrev.ecommerce.store.product;
 
 import emildobrev.ecommerce.store.product.dto.*;
+import jakarta.annotation.security.PermitAll;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -46,7 +46,12 @@ public class ProductController {
         return ResponseEntity.notFound().build();
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+
+    @GetMapping("/compare")
+    public ResponseEntity<List<ProductDTO>> compareProducts(@RequestBody @NonNull List<String> productIds) {
+        return ResponseEntity.ok().body(productService.compareProducts(productIds));
+    }
+
     @PostMapping
     public ResponseEntity<Product> createProduct(@RequestBody ProductDTO product) {
         Product createdProduct = productService.createProduct(product);
@@ -102,7 +107,7 @@ public class ProductController {
     @PostMapping("/wishlist/add/{id}")
     public ResponseEntity<WishListResponse> addProductToWishList(@PathVariable @NonNull String id,
                                                                  Authentication authentication) {
-        return ResponseEntity.ok().body(productService.addproducttowishlist(id, authentication.getName()));
+        return ResponseEntity.ok().body(productService.addProductToWishlist(id, authentication.getName()));
     }
 
     @PutMapping("/wishlist/remove/{id}")

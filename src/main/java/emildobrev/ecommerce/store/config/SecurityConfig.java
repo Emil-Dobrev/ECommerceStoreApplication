@@ -31,7 +31,7 @@ public class SecurityConfig {
                 .cors(withDefaults())
                 .authorizeHttpRequests((authz) ->
                     authz
-                            .requestMatchers("/api/v1/auth/**", API_V_1_PRODUCTS , "/api/v1/products/comment" ).permitAll()
+                            .requestMatchers("/api/v1/auth/**", API_V_1_PRODUCTS , "/api/v1/products/comment", "/api/v1/products/compare" ).permitAll()
                             .requestMatchers(HttpMethod.PATCH  , API_V_1_PRODUCTS , "http://localhost:8080/api/v1/products/vote").hasAnyAuthority(ADMIN, USER)
                             .requestMatchers(HttpMethod.PATCH, "/api/v1/order/status").hasAnyAuthority(ADMIN)
                             .requestMatchers(HttpMethod.POST  , API_V_1_PRODUCTS, "/api/v1/coupons").hasAnyAuthority(ADMIN)

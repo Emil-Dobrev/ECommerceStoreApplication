@@ -22,6 +22,7 @@ public interface ProductService {
     List<ProductDTO> getAllByNameRegex(String regex);
     CartResponse addProductToCart(String productId,int quantity, String email);
     CartResponse removeProductFromCart(String id, String email);
-    WishListResponse addproducttowishlist(String id, String email);
+    WishListResponse addProductToWishlist(String id, String email);
     WishListResponse removeProductFromWishlist(String id, String email);
+    List<ProductDTO> compareProducts(List<String> productIds);
 }

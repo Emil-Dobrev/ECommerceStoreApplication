@@ -101,8 +101,6 @@ v
 Fsrc/main/java/emildobrev/ecommerce/store/coupons/CouponRepository.java,2/1/21bf1f1baa86da3de6af625eced8c0ee8d662630
 v
 Fsrc/main/java/emildobrev/ecommerce/store/coupons/CouponController.java,9/5/95dcab294c0e3a3046714bb467576c9ce0d71d23
-q
-Asrc/main/java/emildobrev/ecommerce/store/user/UserServiceImp.java,b/8/b85340573c6f7489b9d8cea67907baaa780d7d65
 g
 7src/main/java/emildobrev/ecommerce/store/user/Role.java,5/f/5f7549863308e787a288a62ae18325d281c72a26
 n
@@ -133,8 +131,6 @@ x
 Hsrc/main/java/emildobrev/ecommerce/store/auth/AuthenticationService.java,2/c/2cfa7fbeefd0633e3b228e86184da332ba53dbef
 z
 Jsrc/main/java/emildobrev/ecommerce/store/product/dto/WishListResponse.java,3/3/33bbb06ab3c38ad2c5469ab488b1476b28d5d5f2
-g
-7src/main/java/emildobrev/ecommerce/store/user/User.java,2/2/22970dae12999f3c10cfa01d39a837b795789557
 ’
 bsrc/test/java/emildobrev/ecommerce/store/integration/product/ProductControllerIntegrationTest.java,4/b/4b52c2863d8ae0e7e42388c8cf93bd7c2161c66e
 s

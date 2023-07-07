@@ -160,7 +160,7 @@ public class ProductServiceImp implements ProductService {
     }
 
     @Override
-    public WishListResponse addproducttowishlist(String id, String email) {
+    public WishListResponse addProductToWishlist(String id, String email) {
         var user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(PRODUCT_NOT_FOUND_WITH_ID + id));
@@ -196,6 +196,16 @@ public class ProductServiceImp implements ProductService {
                 .productName(product.getName())
                 .message(removed ? "Successfully removed" : "No matching product found")
                 .build();
+    }
+
+    @Override
+    public List<ProductDTO> compareProducts(List<String> productIds) {
+        return productIds.stream()
+                .map(productRepository::findById)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(this::convertToDTO)
+                .toList();
     }
 
     private double calculateAverageRating(HashMap<String, Double> votedUsers) {
