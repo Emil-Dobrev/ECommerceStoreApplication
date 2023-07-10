@@ -37,9 +37,9 @@ import static emildobrev.ecommerce.store.constants.Constants.USER_NOT_FOUND;
 @Slf4j
 public class ProductServiceImp implements ProductService {
     public static final String PRODUCT_NOT_FOUND_WITH_ID = "Product not found with id:";
-    private ProductRepository productRepository;
-    private ModelMapper modelMapper;
-    private UserRepository userRepository;
+    private final ProductRepository productRepository;
+    private final ModelMapper modelMapper;
+    private final UserRepository userRepository;
     private final MongoTemplate mongoTemplate;
 
 

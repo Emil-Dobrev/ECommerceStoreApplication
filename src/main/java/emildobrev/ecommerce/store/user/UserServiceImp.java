@@ -15,7 +15,6 @@ public class UserServiceImp implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final ModelMapper modelMapper;
 
     @Override
     public UpdateUserRequest updateUser(String email, UpdateUserRequest updateUser) {
