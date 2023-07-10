@@ -129,8 +129,6 @@ l
 <src/main/java/emildobrev/ecommerce/store/enums/Category.java,3/1/31119a08600e5bcf40e1729b5a3f3dda4ff3ed63
 x
 Hsrc/main/java/emildobrev/ecommerce/store/order/OrderNumberGenerator.java,8/9/894824cd149cdb694b8a5e213dad16031e3763be
-l
-<src/main/java/emildobrev/ecommerce/store/jobs/CouponJob.java,e/5/e56982086ad4551ff149530ad763e14d2bf5ff3f
 o
 ?src/main/java/emildobrev/ecommerce/store/enums/CouponsType.java,a/1/a171b7cb5f9c3a5fa25e40fe6bdcc89cd7701a54
 o

@@ -42,7 +42,6 @@ public class CouponJob {
     private final EmailService emailService;
 
     @Scheduled(cron = "@monthly")
-    //TODO to be removed  //    @Scheduled(cron = "0 * * * * *")
     @Transactional
     public void generateLoyalCoupons() {
         log.info("Generate loyalty coupons job started");
