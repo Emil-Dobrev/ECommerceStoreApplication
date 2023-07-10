@@ -52,7 +52,7 @@ public class OrderServiceImp implements OrderService {
     @Transactional
     public CreateOrderResponse createOrder(@NotNull String email, String couponId) {
         var user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new NotFoundException("User not found with ID: " + email));
+                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND + email));
 
         var cart = user.getCart();
         if (cart.isEmpty()) {
@@ -96,7 +96,7 @@ public class OrderServiceImp implements OrderService {
     @Override
     public void cancelOrder(String email, String orderId) {
         var user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new NotFoundException("User not found with ID: " + email));
+                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND + email));
 
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new NotFoundException("Order not found with ID: " + orderId));
@@ -119,7 +119,7 @@ public class OrderServiceImp implements OrderService {
     @Override
     public List<OrderForUserResponse> getAllOrdersForUser(String email) {
         var user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new NotFoundException("User not found with ID: " + email));
+                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND + email));
         var orderList =  orderRepository.findAllByUserId(user.getId());
 
         return IntStream.range(0, orderList.size())
