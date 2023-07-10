@@ -1,5 +1,6 @@
 package emildobrev.ecommerce.store.product;
 
+import com.mongodb.lang.Nullable;
 import emildobrev.ecommerce.store.enums.Category;
 import emildobrev.ecommerce.store.exception.NoSuchElementException;
 import emildobrev.ecommerce.store.exception.NotFoundException;
@@ -44,41 +45,30 @@ public class ProductServiceImp implements ProductService {
 
 
     public Page<ProductDTO> getAllProducts(Pageable pageable,
-                                           Double minRating) {
+                                           @Nullable Double minRating) {
         Query query = new Query().with(pageable);
 
-        if(minRating != null) {
+        if (minRating != null) {
             query.addCriteria(Criteria.where("rating").lte(minRating));
             Sort sort = Sort.by(Sort.Order.desc("rating"));
             query.with(sort);
         }
 
-       return PageableExecutionUtils.getPage(
+        return PageableExecutionUtils.getPage(
                 mongoTemplate.find(query, ProductDTO.class),
                 pageable,
                 () -> mongoTemplate.count(query.skip(0).limit(0), ProductDTO.class));
     }
 
-    @Override
-    public Page<ProductDTO> getAllProducts(Pageable pageable) {
-        return null;
-    }
-
     public ProductDTO getProductById(String id) {
-        Optional<Product> product = productRepository.findById(id);
-        if (product.isPresent()) {
-            return modelMapper.map(product, ProductDTO.class);
-        }
-        throw new NotFoundException(PRODUCT_NOT_FOUND_WITH_ID + id);
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(PRODUCT_NOT_FOUND_WITH_ID + id));
+        return convertToDTO(product);
     }
 
     public Product createProduct(ProductDTO productDTO) {
-        try {
-            Product product = modelMapper.map(productDTO, Product.class);
-            return productRepository.save(product);
-        } catch (DataAccessException e) {
-            throw new ProductCreationException("Failed to create product", e);
-        }
+        Product product = modelMapper.map(productDTO, Product.class);
+        return productRepository.save(product);
     }
 
     public ProductDTO updateProduct(ProductDTO productDTO) {
@@ -205,7 +195,7 @@ public class ProductServiceImp implements ProductService {
         HashSet<ProductCartDTO> userWishList = user.getWishList();
         boolean removed = userWishList.removeIf(e -> Objects.equals(e.getId(), id));
 
-        if(removed) userRepository.save(user);
+        if (removed) userRepository.save(user);
 
         return WishListResponse.builder()
                 .productName(product.getName())

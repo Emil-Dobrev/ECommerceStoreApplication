@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface ProductService {
 
-    Page<ProductDTO> getAllProducts(Pageable pageable);
+    Page<ProductDTO> getAllProducts(Pageable pageable, Double minRating);
     ProductDTO getProductById(String id);
     Product createProduct(ProductDTO product);
     ProductDTO updateProduct(ProductDTO productDTO);
