@@ -2,12 +2,14 @@ package emildobrev.ecommerce.store.util;
 
 import emildobrev.ecommerce.store.coupons.Coupon;
 import emildobrev.ecommerce.store.user.User;
+import emildobrev.ecommerce.store.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 import java.time.Instant;
 @RequiredArgsConstructor
 public class Utils {
 
+    private final UserRepository userRepository;
 
 
     public static String getFullName(User user) {
@@ -20,4 +22,6 @@ public class Utils {
                 coupon.getValidFrom().isBefore(now) &&
                 coupon.getValidTo().isAfter(now);
     }
+
+
 }

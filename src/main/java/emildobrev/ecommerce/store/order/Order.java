@@ -1,6 +1,7 @@
 package emildobrev.ecommerce.store.order;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import emildobrev.ecommerce.store.enums.OrderStatus;
 import emildobrev.ecommerce.store.product.dto.ProductCartDTO;
 import lombok.*;
@@ -16,6 +17,7 @@ import java.util.HashSet;
 @AllArgsConstructor
 @Builder
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Order {
     @Id
     @JsonIgnore

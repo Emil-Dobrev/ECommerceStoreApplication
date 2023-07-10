@@ -4,7 +4,6 @@ import com.mongodb.lang.Nullable;
 import emildobrev.ecommerce.store.enums.Category;
 import emildobrev.ecommerce.store.exception.NoSuchElementException;
 import emildobrev.ecommerce.store.exception.NotFoundException;
-import emildobrev.ecommerce.store.exception.ProductCreationException;
 import emildobrev.ecommerce.store.exception.UserAlreadyVotedException;
 import emildobrev.ecommerce.store.product.dto.CartResponse;
 import emildobrev.ecommerce.store.product.dto.ProductCartDTO;
@@ -16,12 +15,10 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.ArithmeticOperators;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.support.PageableExecutionUtils;
@@ -72,22 +69,23 @@ public class ProductServiceImp implements ProductService {
     }
 
     public ProductDTO updateProduct(ProductDTO productDTO) {
-        Optional<Product> existingProduct = productRepository.findById(productDTO.getId());
-        if (existingProduct.isPresent()) {
-            merge(productDTO, existingProduct.get());
-            Product updatedProduct = productRepository.save(existingProduct.get());
-            return modelMapper.map(updatedProduct, ProductDTO.class);
-        }
-        throw new NotFoundException(PRODUCT_NOT_FOUND_WITH_ID + productDTO.getId());
+        Product existingProduct = productRepository.findById(productDTO.getId())
+                .orElseThrow(() -> new NotFoundException(PRODUCT_NOT_FOUND_WITH_ID + productDTO.getId()));
+
+        merge(productDTO, existingProduct);
+        Product updatedProduct = productRepository.save(existingProduct);
+        return convertToDTO(updatedProduct);
     }
 
     public void deleteProduct(String id) {
-        Product existingProduct = productRepository.findById(id).orElseThrow(() -> new NotFoundException("Not found product with id:" + id));
+        Product existingProduct = productRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Not found product with id:" + id));
         productRepository.delete(existingProduct);
     }
 
     public List<ProductDTO> getAllProductsByCategory(Category category) {
-        var products = productRepository.findAllByCategory(category).orElseThrow(() -> new NoSuchElementException("No products for category:" + category));
+        var products = productRepository.findAllByCategory(category)
+                .orElseThrow(() -> new NoSuchElementException("No products for category:" + category));
 
         return products.stream()
                 .map(this::convertToDTO)
@@ -127,7 +125,8 @@ public class ProductServiceImp implements ProductService {
     }
 
     public CartResponse addProductToCart(String productId, int quantity, String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new NotFoundException(PRODUCT_NOT_FOUND_WITH_ID + productId));
 
@@ -149,7 +148,8 @@ public class ProductServiceImp implements ProductService {
     }
 
     public CartResponse removeProductFromCart(String id, String email) {
-        var user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
+        var user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
 
         HashSet<ProductCartDTO> userCart = user.getCart();
         boolean removed = userCart.removeIf(e -> Objects.equals(e.getId(), id)); // Remove the object with the same ID
@@ -166,9 +166,11 @@ public class ProductServiceImp implements ProductService {
 
     @Override
     public WishListResponse addProductToWishlist(String id, String email) {
-        var user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
+        var user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(PRODUCT_NOT_FOUND_WITH_ID + id));
+
         var cartDto = modelMapper.map(product, ProductCartDTO.class);
         var wishList = user.getWishList();
 
@@ -188,7 +190,8 @@ public class ProductServiceImp implements ProductService {
 
     @Override
     public WishListResponse removeProductFromWishlist(String id, String email) {
-        var user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
+        var user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(PRODUCT_NOT_FOUND_WITH_ID + id));
 
