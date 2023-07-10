@@ -3,6 +3,7 @@ package emildobrev.ecommerce.store.product;
 import emildobrev.ecommerce.store.product.dto.*;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -24,15 +26,15 @@ public class ProductController {
     private ProductServiceImp productService;
 
     @GetMapping
-    @Cacheable(value = "products", key = "#page + '-' + #size")
+    @Cacheable(value = "products", key = "#page + '-' + #size + '-' + #minRating", condition = "#minRating == null")
+    @CacheEvict(value = "products", key = "#page + '-' + #size + '-' + #minRating", condition = "#minRating != null")
     public ResponseEntity<Page<ProductDTO>> getAllProducts(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "25") int size
+            @RequestParam(defaultValue = "25") int size,
+            @RequestParam(required = false)  Double minRating
     ) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<ProductDTO> productPage = productService.getAllProducts(pageable);
-        List<ProductDTO> productDTOList = productPage.getContent().stream().toList();
-        return ResponseEntity.ok(new PageImpl<>(productDTOList, pageable, productPage.getTotalElements()));
+        return ResponseEntity.ok().body(productService.getAllProducts(pageable, minRating));
     }
 
     @GetMapping("/{id}")

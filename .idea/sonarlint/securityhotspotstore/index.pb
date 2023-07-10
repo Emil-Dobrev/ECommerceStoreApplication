@@ -117,8 +117,6 @@ p
 @src/main/java/emildobrev/ecommerce/store/email/EmailService.java,7/1/71ce2b400b9be18c844059063267cb513fd9c812
 s
 Csrc/main/java/emildobrev/ecommerce/store/email/EmailServiceImp.java,e/c/ec3c1e3a0bf66c1e51de6afbf410bdd23b659f87
-m
-=src/main/java/emildobrev/ecommerce/store/product/Product.java,6/e/6e8aabd54b1062d693aab3d5f282bd9ee06613db
 s
 Csrc/main/java/emildobrev/ecommerce/store/product/dto/RatingDTO.java,5/a/5a30b3a49c0ecc8cdad501c51c87a4c0d33ad366
 z
