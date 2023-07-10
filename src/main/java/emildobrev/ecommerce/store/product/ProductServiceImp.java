@@ -15,10 +15,14 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.ArithmeticOperators;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -36,17 +40,28 @@ public class ProductServiceImp implements ProductService {
     private ProductRepository productRepository;
     private ModelMapper modelMapper;
     private UserRepository userRepository;
+    private final MongoTemplate mongoTemplate;
 
 
-    public Page<ProductDTO> getAllProducts(Pageable pageable) {
-        Page<Product> products = productRepository.findAll(pageable);
-        return PageableExecutionUtils.getPage(
-                products.stream()
-                        .map(this::convertToDTO)
-                        .toList(),
+    public Page<ProductDTO> getAllProducts(Pageable pageable,
+                                           Double minRating) {
+        Query query = new Query().with(pageable);
+
+        if(minRating != null) {
+            query.addCriteria(Criteria.where("rating").lte(minRating));
+            Sort sort = Sort.by(Sort.Order.desc("rating"));
+            query.with(sort);
+        }
+
+       return PageableExecutionUtils.getPage(
+                mongoTemplate.find(query, ProductDTO.class),
                 pageable,
-                products::getTotalElements
-        );
+                () -> mongoTemplate.count(query.skip(0).limit(0), ProductDTO.class));
+    }
+
+    @Override
+    public Page<ProductDTO> getAllProducts(Pageable pageable) {
+        return null;
     }
 
     public ProductDTO getProductById(String id) {
